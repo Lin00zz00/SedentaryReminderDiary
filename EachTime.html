@@ -420,70 +420,46 @@
                 reportContainer.style.overflow = 'visible';
                 reportContainer.style.backgroundColor = '#ffffff';
 
-                // 转换为图片并保存
+                // 转换为图片
                 const img = canvas.toDataURL('image/png');
                 
-                // 检查是否支持分享API
-                if (navigator.share) {
-                    try {
-                        const blob = await fetch(img).then(r => r.blob());
-                        const file = new File([blob], `单次起身记录_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`, { type: 'image/png' });
-                        
-                        await navigator.share({
-                            title: '单次起身记录',
-                            text: '查看我的起身记录',
-                            files: [file]
-                        });
-                    } catch (err) {
-                        // 如果分享失败，尝试保存
-                        if ('showSaveFilePicker' in window) {
-                            try {
-                                const handle = await window.showSaveFilePicker({
-                                    suggestedName: `单次起身记录_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`,
-                                    types: [{
-                                        description: 'PNG图片',
-                                        accept: {
-                                            'image/png': ['.png']
-                                        }
-                                    }]
-                                });
-                                
-                                const writable = await handle.createWritable();
-                                const blob = await fetch(img).then(r => r.blob());
-                                await writable.write(blob);
-                                await writable.close();
-                            } catch (err) {
-                                fallbackDownload(img, dateStr, timeStr);
-                            }
-                        } else {
-                            fallbackDownload(img, dateStr, timeStr);
-                        }
-                    }
-                } else {
-                    // 如果不支持分享API，尝试保存
-                    if ('showSaveFilePicker' in window) {
-                        try {
-                            const handle = await window.showSaveFilePicker({
-                                suggestedName: `单次起身记录_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`,
-                                types: [{
-                                    description: 'PNG图片',
-                                    accept: {
-                                        'image/png': ['.png']
-                                    }
-                                }]
-                            });
-                            
-                            const writable = await handle.createWritable();
-                            const blob = await fetch(img).then(r => r.blob());
-                            await writable.write(blob);
-                            await writable.close();
-                        } catch (err) {
-                            fallbackDownload(img, dateStr, timeStr);
-                        }
-                    } else {
-                        fallbackDownload(img, dateStr, timeStr);
-                    }
-                }
+                // 创建下载链接
+                const a = document.createElement('a');
+                a.href = img;
+                a.download = `单次起身记录_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                // 下载完成后显示分享选项
+                setTimeout(() => {
+                    const shareDialog = document.createElement('div');
+                    shareDialog.style.cssText = `
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: white;
+                        padding: 20px;
+                        border-radius: 15px;
+                        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                        z-index: 1000;
+                        text-align: center;
+                    `;
+                    shareDialog.innerHTML = `
+                        <h3 style="margin-bottom: 15px;">分享到微信</h3>
+                        <button onclick="window.location.href='weixin://dl/chat'" 
+                                style="background: #07C160; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                            打开微信
+                        </button>
+                        <button onclick="this.parentElement.remove()" 
+                                style="background: #f5f5f5; color: #666; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+                            取消
+                        </button>
+                    `;
+                    document.body.appendChild(shareDialog);
+                }, 1000);
+
             } catch (error) {
                 console.error('生成图片时出错:', error);
                 alert('生成图片时出错，请重试');
@@ -491,16 +467,6 @@
                 // 隐藏加载提示
                 document.querySelector('.loading').style.display = 'none';
             }
-        }
-
-        // 传统下载方式
-        function fallbackDownload(img, dateStr, timeStr) {
-            const a = document.createElement('a');
-            a.href = img;
-            a.download = `单次起身记录_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
         }
 
         function getSelectedValue(selector) {
