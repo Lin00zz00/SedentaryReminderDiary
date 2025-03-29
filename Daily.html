@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日久坐情况调查</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            transition: transform 0.2s;
+        }
+
+        .question:hover {
+            transform: translateY(-2px);
+        }
+
+        .question-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option:hover {
+            border-color: #4CAF50;
+            background: #f1f8e9;
+        }
+
+        .option.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        .rating-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .rating-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .rating-option.selected {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .emoji {
+            font-size: 24px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .question {
+                padding: 15px;
+            }
+            
+            .option {
+                padding: 12px;
+            }
+        }
+
+        /* 修改报告图片的样式 */
+        #report-container {
+            display: none;
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: 600px;
+            max-width: 90vw;
+            z-index: 9999;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        .report-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .report-content {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .report-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .report-footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 16px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            z-index: 1000;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 每日久坐情况调查</h1>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 今天你久坐的总时长？</div>
+            <div class="options">
+                <div class="option" data-value="less-than-3">🕒 小于 3 小时</div>
+                <div class="option" data-value="3-5">🕒 3-5 小时</div>
+                <div class="option" data-value="5-7">🕒 5-7 小时</div>
+                <div class="option" data-value="more-than-7">🕒 超过 7 小时</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 今天你主要在哪些场景久坐？（多选）</div>
+            <div class="options">
+                <div class="option" data-value="office">🏢 办公室</div>
+                <div class="option" data-value="school">📚 学校</div>
+                <div class="option" data-value="home">🏠 家里</div>
+                <div class="option" data-value="transport">✈️ 交通工具</div>
+                <div class="option" data-value="other">其他</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 今天你主动起身多少次？（不算上厕所）</div>
+            <div class="options">
+                <div class="option" data-value="0">0 次</div>
+                <div class="option" data-value="1-2">1-2 次</div>
+                <div class="option" data-value="3-5">3-5 次</div>
+                <div class="option" data-value="6-plus">6 次以上</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 今天你因久坐感到身体不适的程度？（1-5分）</div>
+            <div class="rating-options">
+                <div class="rating-option" data-value="1">😌 1</div>
+                <div class="rating-option" data-value="2">😐 2</div>
+                <div class="rating-option" data-value="3">😬 3</div>
+                <div class="rating-option" data-value="4">😣 4</div>
+                <div class="rating-option" data-value="5">😖 5</div>
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="generateAndDownload()">生成报告并下载</button>
+    </div>
+
+    <!-- 添加报告容器 -->
+    <div id="report-container">
+        <div class="report-header">
+            <h1>📅 每日久坐情况报告</h1>
+        </div>
+        <div class="report-content">
+            <div class="report-item" id="report-date"></div>
+            <div class="report-item" id="report-time"></div>
+            <div class="report-item" id="report-duration"></div>
+            <div class="report-item" id="report-locations"></div>
+            <div class="report-item" id="report-standup"></div>
+            <div class="report-item" id="report-discomfort"></div>
+        </div>
+        <div class="report-footer">
+            💝 温馨提示：记得适时起身活动，保持健康哦！
+        </div>
+    </div>
+
+    <!-- 添加加载提示 -->
+    <div class="loading">正在生成报告图片...</div>
+
+    <script>
+        // 处理选项选择
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                if (parent.classList.contains('options')) {
+                    // 对于多选问题，允许选择多个选项
+                    this.classList.toggle('selected');
+                } else {
+                    // 对于单选问题，只能选择一个选项
+                    parent.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                }
+            });
+        });
+
+        // 处理评分选择
+        document.querySelectorAll('.rating-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                parent.querySelectorAll('.rating-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // 修改生成报告的函数
+        async function generateAndDownload() {
+            const answers = {
+                duration: getSelectedValue('.question:nth-child(2) .option'),
+                locations: getSelectedValues('.question:nth-child(3) .option'),
+                standUpTimes: getSelectedValue('.question:nth-child(4) .option'),
+                discomfortLevel: getSelectedValue('.rating-option')
+            };
+
+            // 获取当前日期和时间
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+            const timeStr = now.toLocaleTimeString('zh-CN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+
+            // 更新报告内容
+            document.getElementById('report-date').textContent = `📆 记录日期：${dateStr}`;
+            document.getElementById('report-time').textContent = `⏰ 记录时间：${timeStr}`;
+            document.getElementById('report-duration').textContent = `📍 久坐总时长：${answers.duration || '未选择'}`;
+            document.getElementById('report-locations').textContent = `📍 久坐场景：${answers.locations.join(', ') || '未选择'}`;
+            document.getElementById('report-standup').textContent = `📍 主动起身次数：${answers.standUpTimes || '未选择'}`;
+            document.getElementById('report-discomfort').textContent = `📍 身体不适程度：${answers.discomfortLevel || '未选择'}`;
+
+            // 显示加载提示
+            document.querySelector('.loading').style.display = 'block';
+
+            try {
+                // 临时显示报告容器
+                const reportContainer = document.getElementById('report-container');
+                reportContainer.style.display = 'block';
+                reportContainer.style.top = '0';
+                reportContainer.style.left = '0';
+                reportContainer.style.position = 'fixed';
+                reportContainer.style.width = '100%';
+                reportContainer.style.height = '100%';
+                reportContainer.style.overflow = 'auto';
+                reportContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+
+                // 生成图片
+                const canvas = await html2canvas(reportContainer, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    width: 600,
+                    height: reportContainer.scrollHeight
+                });
+
+                // 恢复报告容器样式
+                reportContainer.style.display = 'none';
+                reportContainer.style.top = '-9999px';
+                reportContainer.style.left = '-9999px';
+                reportContainer.style.position = 'fixed';
+                reportContainer.style.width = '600px';
+                reportContainer.style.height = 'auto';
+                reportContainer.style.overflow = 'visible';
+                reportContainer.style.backgroundColor = '#ffffff';
+
+                // 转换为图片并下载
+                const img = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = img;
+                a.download = `久坐情况报告_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (error) {
+                console.error('生成图片时出错:', error);
+                alert('生成图片时出错，请重试');
+            } finally {
+                // 隐藏加载提示
+                document.querySelector('.loading').style.display = 'none';
+            }
+        }
+
+        function getSelectedValue(selector) {
+            const selected = document.querySelector(`${selector}.selected`);
+            return selected ? selected.textContent.trim() : '';
+        }
+
+        function getSelectedValues(selector) {
+            return Array.from(document.querySelectorAll(`${selector}.selected`))
+                .map(el => el.textContent.trim());
+        }
+    </script>
+</body>
+</html> 
