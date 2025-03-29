@@ -13,6 +13,7 @@
 
 访问地址：
 每日的:[https://lin00zz00.github.io/SedentaryReminderDiary/](https://lin00zz00.github.io/SedentaryReminderDiary/)
+
 每次的:[https://lin00zz00.github.io/SedentaryReminderDiary/EachTime.html](https://lin00zz00.github.io/SedentaryReminderDiary/EachTime.html)
 
 ## 本地运行
@@ -20,5 +21,4 @@
 直接在浏览器中打开 `index.html` 文件即可使用。
 
 ## 感谢作答！
-
 💝 温馨提示：记得适时起身活动，保持健康哦！
