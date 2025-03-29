@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单次起身记录</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            transition: transform 0.2s;
+        }
+
+        .question:hover {
+            transform: translateY(-2px);
+        }
+
+        .question-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option:hover {
+            border-color: #4CAF50;
+            background: #f1f8e9;
+        }
+
+        .option.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        .rating-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .rating-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .rating-option.selected {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .emoji {
+            font-size: 24px;
+        }
+
+        .other-input {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .other-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        #report-container {
+            display: none;
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: 600px;
+            max-width: 90vw;
+            z-index: 9999;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        .report-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .report-content {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .report-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .report-footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 16px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            z-index: 1000;
+            font-size: 16px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .question {
+                padding: 15px;
+            }
+            
+            .option {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>单次起身记录</h1>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 本次你连续坐了多久？</div>
+            <div class="options">
+                <div class="option" data-value="less-than-30">🕒 小于 30 分钟</div>
+                <div class="option" data-value="30-60">🕒 30-60 分钟</div>
+                <div class="option" data-value="1-2">🕒 1-2 小时</div>
+                <div class="option" data-value="more-than-2">🕒 超过 2 小时</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 本次起身的原因？（多选）</div>
+            <div class="options">
+                <div class="option" data-value="toilet">🚽 上厕所</div>
+                <div class="option" data-value="coffee">☕ 拿咖啡 / 水</div>
+                <div class="option" data-value="meal">🍴 吃饭 / 休息</div>
+                <div class="option" data-value="phone">📞 接电话 / 会议</div>
+                <div class="option" data-value="reminder">🔔 久坐提醒（App / 手表 / 手机）</div>
+                <div class="option" data-value="active">🏃‍♂️ 自己主动想活动</div>
+                <div class="option" data-value="other">其他</div>
+            </div>
+            <input type="text" class="other-input" placeholder="请输入其他原因..." id="other-reason">
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 起身时你的身体状态？</div>
+            <div class="rating-options">
+                <div class="rating-option" data-value="1">😌 很轻松</div>
+                <div class="rating-option" data-value="2">😐 还行但有点僵硬</div>
+                <div class="rating-option" data-value="3">😣 觉得酸痛</div>
+                <div class="rating-option" data-value="4">😖 非常不舒服</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 如果本次是因为久坐提醒，那你当时的心情是？</div>
+            <div class="rating-options">
+                <div class="rating-option" data-value="1">😄 开心，正好想动一动</div>
+                <div class="rating-option" data-value="2">🙂 还行，能接受提醒</div>
+                <div class="rating-option" data-value="3">🙄 有点烦，但还是站起来了</div>
+                <div class="rating-option" data-value="4">😑 觉得打扰了，没理它</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 你本次起身后做了什么？</div>
+            <div class="options">
+                <div class="option" data-value="walk">🚶‍♂️ 走了几步 / 拉伸</div>
+                <div class="option" data-value="exercise">💪 认真做了个运动</div>
+                <div class="option" data-value="sit">📱 只是换个姿势继续坐</div>
+                <div class="option" data-value="other">其他</div>
+            </div>
+            <input type="text" class="other-input" placeholder="请输入其他活动..." id="other-activity">
+        </div>
+
+        <button class="submit-btn" onclick="generateAndDownload()">生成报告并下载</button>
+    </div>
+
+    <!-- 添加报告容器 -->
+    <div id="report-container">
+        <div class="report-header">
+            <h1>📅 单次起身记录报告</h1>
+        </div>
+        <div class="report-content">
+            <div class="report-item" id="report-date"></div>
+            <div class="report-item" id="report-time"></div>
+            <div class="report-item" id="report-duration"></div>
+            <div class="report-item" id="report-reason"></div>
+            <div class="report-item" id="report-status"></div>
+            <div class="report-item" id="report-mood"></div>
+            <div class="report-item" id="report-activity"></div>
+        </div>
+        <div class="report-footer">
+            💝 温馨提示：记得适时起身活动，保持健康哦！
+        </div>
+    </div>
+
+    <!-- 添加加载提示 -->
+    <div class="loading">正在生成报告图片...</div>
+
+    <script>
+        // 处理选项选择
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                // 所有选项都支持点击切换选择状态
+                this.classList.toggle('selected');
+                
+                // 处理"其他"选项的输入框显示
+                if (this.dataset.value === 'other') {
+                    const input = this.parentElement.nextElementSibling;
+                    if (this.classList.contains('selected')) {
+                        input.style.display = 'block';
+                    } else {
+                        input.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        // 处理评分选择
+        document.querySelectorAll('.rating-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                // 评分选项保持单选
+                parent.querySelectorAll('.rating-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // 修改生成报告的函数
+        async function generateAndDownload() {
+            const answers = {
+                duration: getSelectedValue('.question:nth-child(2) .option'),
+                reasons: getSelectedValues('.question:nth-child(3) .option'),
+                otherReason: document.getElementById('other-reason').value,
+                status: getSelectedValue('.question:nth-child(4) .rating-option'),
+                mood: getSelectedValue('.question:nth-child(5) .rating-option'),
+                activity: getSelectedValues('.question:nth-child(6) .option'),
+                otherActivity: document.getElementById('other-activity').value
+            };
+
+            // 获取当前日期和时间
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+            const timeStr = now.toLocaleTimeString('zh-CN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+
+            // 更新报告内容
+            document.getElementById('report-date').textContent = `📆 记录日期：${dateStr}`;
+            document.getElementById('report-time').textContent = `⏰ 记录时间：${timeStr}`;
+            document.getElementById('report-duration').textContent = `📍 连续久坐时长：${answers.duration || '未选择'}`;
+            
+            let reasonsText = answers.reasons.join(', ');
+            if (answers.reasons.includes('其他') && answers.otherReason) {
+                reasonsText = reasonsText.replace('其他', answers.otherReason);
+            }
+            document.getElementById('report-reason').textContent = `📍 起身原因：${reasonsText || '未选择'}`;
+            
+            document.getElementById('report-status').textContent = `📍 身体状态：${answers.status || '未选择'}`;
+            document.getElementById('report-mood').textContent = `📍 提醒心情：${answers.mood || '未选择'}`;
+            
+            let activityText = answers.activity.join(', ');
+            if (answers.activity.includes('其他') && answers.otherActivity) {
+                activityText = activityText.replace('其他', answers.otherActivity);
+            }
+            document.getElementById('report-activity').textContent = `📍 起身活动：${activityText || '未选择'}`;
+
+            // 显示加载提示
+            document.querySelector('.loading').style.display = 'block';
+
+            try {
+                // 临时显示报告容器
+                const reportContainer = document.getElementById('report-container');
+                reportContainer.style.display = 'block';
+                reportContainer.style.top = '0';
+                reportContainer.style.left = '0';
+                reportContainer.style.position = 'fixed';
+                reportContainer.style.width = '100%';
+                reportContainer.style.height = '100%';
+                reportContainer.style.overflow = 'auto';
+                reportContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+
+                // 生成图片
+                const canvas = await html2canvas(reportContainer, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    width: 600,
+                    height: reportContainer.scrollHeight
+                });
+
+                // 恢复报告容器样式
+                reportContainer.style.display = 'none';
+                reportContainer.style.top = '-9999px';
+                reportContainer.style.left = '-9999px';
+                reportContainer.style.position = 'fixed';
+                reportContainer.style.width = '600px';
+                reportContainer.style.height = 'auto';
+                reportContainer.style.overflow = 'visible';
+                reportContainer.style.backgroundColor = '#ffffff';
+
+                // 转换为图片并保存
+                const img = canvas.toDataURL('image/png');
+                
+                // 检查是否支持分享API
+                if (navigator.share) {
+                    try {
+                        const blob = await fetch(img).then(r => r.blob());
+                        const file = new File([blob], `单次起身记录_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`, { type: 'image/png' });
+                        
+                        await navigator.share({
+                            title: '单次起身记录',
+                            text: '查看我的起身记录',
+                            files: [file]
+                        });
+                    } catch (err) {
+                        // 如果分享失败，尝试保存
+                        if ('showSaveFilePicker' in window) {
+                            try {
+                                const handle = await window.showSaveFilePicker({
+                                    suggestedName: `单次起身记录_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`,
+                                    types: [{
+                                        description: 'PNG图片',
+                                        accept: {
+                                            'image/png': ['.png']
+                                        }
+                                    }]
+                                });
+                                
+                                const writable = await handle.createWritable();
+                                const blob = await fetch(img).then(r => r.blob());
+                                await writable.write(blob);
+                                await writable.close();
+                            } catch (err) {
+                                fallbackDownload(img, dateStr, timeStr);
+                            }
+                        } else {
+                            fallbackDownload(img, dateStr, timeStr);
+                        }
+                    }
+                } else {
+                    // 如果不支持分享API，尝试保存
+                    if ('showSaveFilePicker' in window) {
+                        try {
+                            const handle = await window.showSaveFilePicker({
+                                suggestedName: `单次起身记录_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`,
+                                types: [{
+                                    description: 'PNG图片',
+                                    accept: {
+                                        'image/png': ['.png']
+                                    }
+                                }]
+                            });
+                            
+                            const writable = await handle.createWritable();
+                            const blob = await fetch(img).then(r => r.blob());
+                            await writable.write(blob);
+                            await writable.close();
+                        } catch (err) {
+                            fallbackDownload(img, dateStr, timeStr);
+                        }
+                    } else {
+                        fallbackDownload(img, dateStr, timeStr);
+                    }
+                }
+            } catch (error) {
+                console.error('生成图片时出错:', error);
+                alert('生成图片时出错，请重试');
+            } finally {
+                // 隐藏加载提示
+                document.querySelector('.loading').style.display = 'none';
+            }
+        }
+
+        // 传统下载方式
+        function fallbackDownload(img, dateStr, timeStr) {
+            const a = document.createElement('a');
+            a.href = img;
+            a.download = `单次起身记录_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function getSelectedValue(selector) {
+            const selected = document.querySelector(`${selector}.selected`);
+            return selected ? selected.textContent.trim() : '';
+        }
+
+        function getSelectedValues(selector) {
+            return Array.from(document.querySelectorAll(`${selector}.selected`))
+                .map(el => el.textContent.trim());
+        }
+    </script>
+</body>
+</html> 
