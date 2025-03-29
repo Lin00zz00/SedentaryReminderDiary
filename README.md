@@ -1,2 +1,26 @@
-# SedentaryReminderDiary
-Content records for research on the sedentary reminder project diary.
+# 每日久坐情况调查
+
+一个简单易用的移动端问卷应用，用于记录每日久坐情况。
+
+## 功能特点
+
+- 📱 移动端友好的界面设计
+- 🎨 简洁美观的UI
+- 📊 多选和单选支持
+- 📸 生成精美的报告图片
+- 💾 自动保存到手机相册
+
+## 使用方法
+
+1. 打开网页
+2. 选择相应的选项
+3. 点击"生成报告并下载"按钮
+4. 报告图片会自动保存到手机相册
+
+## 在线访问
+
+访问地址：[https://你的用户名.github.io/仓库名/](https://你的用户名.github.io/仓库名/)
+
+## 本地运行
+
+直接在浏览器中打开 `index.html` 文件即可使用。 
