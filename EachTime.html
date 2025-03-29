@@ -448,7 +448,7 @@
                     `;
                     shareDialog.innerHTML = `
                         <h3 style="margin-bottom: 15px;">分享到微信</h3>
-                        <button onclick="window.location.href='weixin://dl/chat'" 
+                        <button onclick="shareToWeChat('${img}')" 
                                 style="background: #07C160; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
                             打开微信
                         </button>
@@ -466,6 +466,34 @@
             } finally {
                 // 隐藏加载提示
                 document.querySelector('.loading').style.display = 'none';
+            }
+        }
+
+        // 添加分享到微信的函数
+        async function shareToWeChat(imgDataUrl) {
+            try {
+                // 获取当前时间戳
+                const timestamp = new Date().getTime();
+                const fileName = `单次起身记录_${timestamp}.png`;
+                
+                // 将base64图片转换为Blob
+                const response = await fetch(imgDataUrl);
+                const blob = await response.blob();
+                const file = new File([blob], fileName, { type: 'image/png' });
+                
+                // 尝试使用系统分享API
+                if (navigator.share) {
+                    await navigator.share({
+                        title: '单次起身记录',
+                        text: '查看我的起身记录',
+                        files: [file]
+                    });
+                } else {
+                    alert('您的浏览器不支持分享功能，请手动打开微信分享');
+                }
+            } catch (err) {
+                console.error('分享失败:', err);
+                alert('分享失败，请手动打开微信分享');
             }
         }
 
