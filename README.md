@@ -12,9 +12,13 @@
 ## 在线访问
 
 访问地址：
-每日的:[https://lin00zz00.github.io/SedentaryReminderDiary/](https://lin00zz00.github.io/SedentaryReminderDiary/)
+每日的:
 
-每次的:[https://lin00zz00.github.io/SedentaryReminderDiary/EachTime.html](https://lin00zz00.github.io/SedentaryReminderDiary/EachTime.html)
+[https://lin00zz00.github.io/SedentaryReminderDiary/](https://lin00zz00.github.io/SedentaryReminderDiary/)
+
+每次的:
+
+[https://lin00zz00.github.io/SedentaryReminderDiary/EachTime.html](https://lin00zz00.github.io/SedentaryReminderDiary/EachTime.html)
 
 ## 本地运行
 
