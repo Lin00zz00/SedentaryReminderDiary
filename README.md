@@ -2,14 +2,6 @@
 
 一个简单易用的移动端问卷应用，用于记录每日久坐情况。
 
-## 功能特点
-
-- 📱 移动端友好的界面设计
-- 🎨 简洁美观的UI
-- 📊 多选和单选支持
-- 📸 生成精美的报告图片
-- 💾 自动保存到手机相册
-
 ## 使用方法
 
 1. 打开网页
@@ -19,8 +11,12 @@
 
 ## 在线访问
 
-访问地址：[https://你的用户名.github.io/仓库名/](https://你的用户名.github.io/仓库名/)
+访问地址：[https://lin00zz00.github.io/SedentaryReminderDiary/](https://lin00zz00.github.io/SedentaryReminderDiary/)
 
 ## 本地运行
 
-直接在浏览器中打开 `index.html` 文件即可使用。 
+直接在浏览器中打开 `index.html` 文件即可使用。
+
+## 感谢作答！
+
+💝 温馨提示：记得适时起身活动，保持健康哦！
