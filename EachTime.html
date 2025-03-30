@@ -489,7 +489,16 @@
                         files: [file]
                     });
                 } else {
-                    alert('您的浏览器不支持分享功能，请手动打开微信分享');
+                    // 如果不支持系统分享API，尝试使用微信URL Scheme
+                    const wechatUrl = `weixin://dl/chat?scene=0&title=单次起身记录&desc=查看我的起身记录&url=${encodeURIComponent(window.location.href)}&imageUrl=${encodeURIComponent(imgDataUrl)}&timestamp=${timestamp}`;
+                    window.location.href = wechatUrl;
+                    
+                    // 如果3秒后还在当前页面，说明可能没有安装微信或打开失败
+                    setTimeout(() => {
+                        if (document.hidden === false) {
+                            alert('请确保已安装微信并登录');
+                        }
+                    }, 3000);
                 }
             } catch (err) {
                 console.error('分享失败:', err);
