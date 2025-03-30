@@ -14,7 +14,7 @@
 
 访问地址：
 每日的:
-[https://lin00zz00.github.io/SedentaryReminderDiary/](https://lin00zz00.github.io/SedentaryReminderDiary/)
+[file:///E:/Projects/Collection/Portfolio/Project02/Research/Dairy/SedentaryReminderDiary/Daily.html](file:///E:/Projects/Collection/Portfolio/Project02/Research/Dairy/SedentaryReminderDiary/Daily.html)
 
 每次的:
 [https://lin00zz00.github.io/SedentaryReminderDiary/EachTime.html](https://lin00zz00.github.io/SedentaryReminderDiary/EachTime.html)
