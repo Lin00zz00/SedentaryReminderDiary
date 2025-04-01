@@ -231,56 +231,118 @@
         <div class="question">
             <div class="question-title">📍 本次你连续坐了多久？</div>
             <div class="options">
-                <div class="option" data-value="less-than-30">🕒 小于 30 分钟</div>
-                <div class="option" data-value="30-60">🕒 30-60 分钟</div>
-                <div class="option" data-value="1-2">🕒 1-2 小时</div>
-                <div class="option" data-value="more-than-2">🕒 超过 2 小时</div>
+                <div class="option" data-value="less-than-30">🕒 小于30分钟</div>
+                <div class="option" data-value="30-60">🕒 30分钟 - 1小时</div>
+                <div class="option" data-value="1-2">🕒 1-2小时</div>
+                <div class="option" data-value="more-than-2">🕒 2小时以上</div>
             </div>
         </div>
 
         <div class="question">
-            <div class="question-title">📍 本次起身的原因？（多选）</div>
+            <div class="question-title">📍 你这次起身的主要原因？（多选）</div>
             <div class="options">
-                <div class="option" data-value="toilet">🚽 上厕所</div>
-                <div class="option" data-value="coffee">☕ 拿咖啡 / 水</div>
-                <div class="option" data-value="meal">🍴 吃饭 / 休息</div>
-                <div class="option" data-value="phone">📞 接电话 / 会议</div>
-                <div class="option" data-value="reminder">🔔 久坐提醒（App / 手表 / 手机）</div>
-                <div class="option" data-value="active">🏃‍♂️ 自己主动想活动</div>
-                <div class="option" data-value="other">其他</div>
+                <div class="option" data-value="A1">👉 口渴/如厕/吃东西</div>
+                <div class="option" data-value="B1">👉 设备提醒（手机/手环/电脑等）</div>
+                <div class="option" data-value="B2">👉 他人提醒</div>
+                <div class="option" data-value="C1">👉 自己觉得需要活动一下</div>
+                <div class="option" data-value="C2">👉 觉得身体不适</div>
+                <div class="option" data-value="C3">👉 接电话/取外卖/其他任务中断</div>
+                <div class="option" data-value="other">👉 其他</div>
             </div>
             <input type="text" class="other-input" placeholder="请输入其他原因..." id="other-reason">
         </div>
 
         <div class="question">
-            <div class="question-title">📍 起身时你的身体状态？</div>
-            <div class="rating-options">
-                <div class="rating-option" data-value="1">😌 很轻松</div>
-                <div class="rating-option" data-value="2">😐 还行但有点僵硬</div>
-                <div class="rating-option" data-value="3">😣 觉得酸痛</div>
-                <div class="rating-option" data-value="4">😖 非常不舒服</div>
-            </div>
-        </div>
-
-        <div class="question">
-            <div class="question-title">📍 如果本次是因为久坐提醒，那你当时的心情是？</div>
-            <div class="rating-options">
-                <div class="rating-option" data-value="1">😄 开心，正好想动一动</div>
-                <div class="rating-option" data-value="2">🙂 还行，能接受提醒</div>
-                <div class="rating-option" data-value="3">🙄 有点烦，但还是站起来了</div>
-                <div class="rating-option" data-value="4">😑 觉得打扰了，没理它</div>
-            </div>
-        </div>
-
-        <div class="question">
-            <div class="question-title">📍 你本次起身后做了什么？</div>
+            <div class="question-title">📍 你本次/最近一次收到久坐提醒的感受？</div>
             <div class="options">
-                <div class="option" data-value="walk">🚶‍♂️ 走了几步 / 拉伸</div>
-                <div class="option" data-value="exercise">💪 认真做了个运动</div>
-                <div class="option" data-value="sit">📱 只是换个姿势继续坐</div>
-                <div class="option" data-value="other">其他</div>
+                <div class="option" data-value="mood-5">😄 5分 - 开心，正好想动一动</div>
+                <div class="option" data-value="mood-4">🙂 4分 - 还行，能接受提醒</div>
+                <div class="option" data-value="mood-3">😐 3分 - 一般，没什么感觉</div>
+                <div class="option" data-value="mood-2">🙄 2分 - 有点烦，但还是站起来了</div>
+                <div class="option" data-value="mood-1">😑 1分 - 很烦，无视了提醒</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 提醒方式的接受度？（1-5分评分）</div>
+            <div class="options">
+                <div class="option" data-value="accept-1">😊 1分 - 完全不介意</div>
+                <div class="option" data-value="accept-2">🙂 2分 - 可以接受</div>
+                <div class="option" data-value="accept-3">😐 3分 - 中性</div>
+                <div class="option" data-value="accept-4">🙄 4分 - 有点烦躁</div>
+                <div class="option" data-value="accept-5">😫 5分 - 非常反感</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 你当时正在做的事情？</div>
+            <div class="options">
+                <div class="option" data-value="task-urgent">⚡ 处理紧急任务（赶deadline/重要会议）</div>
+                <div class="option" data-value="task-focus">🧠 需要专注思考（写代码/写论文）</div>
+                <div class="option" data-value="task-light">💻 轻度工作/娱乐（浏览网页/看视频）</div>
+                <div class="option" data-value="task-other">其他</div>
+            </div>
+            <input type="text" class="other-input" placeholder="请输入其他活动..." id="other-task">
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 你起身后做了什么？（多选）</div>
+            <div class="options">
+                <div class="option" data-value="activity-sit">🪑 只是换了个姿势继续坐</div>
+                <div class="option" data-value="activity-toilet">🚽 上厕所</div>
+                <div class="option" data-value="activity-water">💧 喝水</div>
+                <div class="option" data-value="activity-walk">🚶‍♂️ 简单走动几步</div>
+                <div class="option" data-value="activity-exercise">💪 认真做了个拉伸/运动</div>
+                <div class="option" data-value="activity-other">其他</div>
             </div>
             <input type="text" class="other-input" placeholder="请输入其他活动..." id="other-activity">
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 活动持续时间？</div>
+            <div class="options">
+                <div class="option" data-value="duration-less-1">⏱️ 少于1分钟</div>
+                <div class="option" data-value="duration-1-5">⏱️ 1-5分钟</div>
+                <div class="option" data-value="duration-more-5">⏱️ 5分钟以上</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 返回座位后的状态变化？</div>
+            <div class="options">
+                <div class="option" data-value="status-better">✨ 感觉注意力提升了</div>
+                <div class="option" data-value="status-worse">😫 感觉更疲劳</div>
+                <div class="option" data-value="status-same">😐 没太大变化</div>
+                <div class="option" data-value="status-other">其他</div>
+            </div>
+            <input type="text" class="other-input" placeholder="请输入其他状态..." id="other-status">
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 你当时是独自一人还是有同事/家人？</div>
+            <div class="options">
+                <div class="option" data-value="alone">👤 独处</div>
+                <div class="option" data-value="with-others">👥 有同事/家人在场</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 你觉得起身会有社会压力吗？</div>
+            <div class="options">
+                <div class="option" data-value="pressure-none">😊 完全不会，我该站就站</div>
+                <div class="option" data-value="pressure-little">🙂 有一点，但还是站了</div>
+                <div class="option" data-value="pressure-medium">🤔 会犹豫，除非有特别的理由</div>
+                <div class="option" data-value="pressure-high">😣 很难在别人面前站起来</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">💭 想说的话</div>
+            <textarea class="other-input" 
+                      placeholder="有什么想说的都可以写在这里..." 
+                      id="additional-thoughts" 
+                      style="height: 100px; resize: vertical;"
+                      rows="4"></textarea>
         </div>
 
         <button class="submit-btn" onclick="generateAndDownload()">生成报告并下载</button>
@@ -299,6 +361,7 @@
             <div class="report-item" id="report-status"></div>
             <div class="report-item" id="report-mood"></div>
             <div class="report-item" id="report-activity"></div>
+            <div class="report-item" id="report-additional-thoughts"></div>
         </div>
         <div class="report-footer">
             💝 温馨提示：记得适时起身活动，保持健康哦！
@@ -344,10 +407,18 @@
                 duration: getSelectedValue('.question:nth-child(2) .option'),
                 reasons: getSelectedValues('.question:nth-child(3) .option'),
                 otherReason: document.getElementById('other-reason').value,
-                status: getSelectedValue('.question:nth-child(4) .rating-option'),
-                mood: getSelectedValue('.question:nth-child(5) .rating-option'),
-                activity: getSelectedValues('.question:nth-child(6) .option'),
-                otherActivity: document.getElementById('other-activity').value
+                mood: getSelectedValue('.question:nth-child(4) .rating-option'),
+                accept: getSelectedValue('.question:nth-child(5) .option'),
+                task: getSelectedValue('.question:nth-child(6) .option'),
+                otherTask: document.getElementById('other-task').value,
+                activity: getSelectedValues('.question:nth-child(7) .option'),
+                otherActivity: document.getElementById('other-activity').value,
+                duration: getSelectedValue('.question:nth-child(8) .option'),
+                status: getSelectedValue('.question:nth-child(9) .option'),
+                otherStatus: document.getElementById('other-status').value,
+                alone: getSelectedValue('.question:nth-child(10) .option'),
+                pressure: getSelectedValue('.question:nth-child(11) .option'),
+                additionalThoughts: document.getElementById('additional-thoughts').value
             };
 
             // 获取当前日期和时间
@@ -384,6 +455,7 @@
                 activityText = activityText.replace('其他', answers.otherActivity);
             }
             document.getElementById('report-activity').textContent = `📍 起身活动：${activityText || '未选择'}`;
+            document.getElementById('report-additional-thoughts').textContent = `💭 想说的话：${answers.additionalThoughts || '无'}`;
 
             // 显示加载提示
             document.querySelector('.loading').style.display = 'block';

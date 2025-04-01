@@ -216,45 +216,120 @@
         </div>
 
         <div class="question">
-            <div class="question-title">📍 今天你久坐的总时长？</div>
+            <div class="question-title">📍 今天是工作日还是休息日？</div>
             <div class="options">
-                <div class="option" data-value="less-than-3">🕒 小于 3 小时</div>
-                <div class="option" data-value="3-5">🕒 3-5 小时</div>
-                <div class="option" data-value="5-7">🕒 5-7 小时</div>
-                <div class="option" data-value="more-than-7">🕒 超过 7 小时</div>
+                <div class="option" data-value="workday">🏢 工作日</div>
+                <div class="option" data-value="restday">🏖️ 休息日</div>
+            </div>
+        </div>
+
+        <div class="question" id="duration-question">
+            <div class="question-title">📍 久坐时长</div>
+            <div class="options">
+                <div class="option" data-value="less-than-3">🕒 3小时以下</div>
+                <div class="option" data-value="3-5">🕒 3-5小时</div>
+                <div class="option" data-value="5-7">🕒 5-7小时</div>
+                <div class="option" data-value="more-than-7">🕒 7小时以上</div>
             </div>
         </div>
 
         <div class="question">
-            <div class="question-title">📍 今天你主要在哪些场景久坐？（多选）</div>
+            <div class="question-title">📍 是否有智能手环/手机等客观设备监测久坐时间？</div>
             <div class="options">
-                <div class="option" data-value="office">🏢 办公室</div>
-                <div class="option" data-value="school">📚 学校</div>
-                <div class="option" data-value="home">🏠 家里</div>
-                <div class="option" data-value="transport">✈️ 交通工具</div>
-                <div class="option" data-value="other">其他</div>
+                <div class="option" data-value="yes">✅ 是</div>
+                <div class="option" data-value="no">❌ 否</div>
+            </div>
+        </div>
+
+        <div class="question" id="device-duration-question" style="display: none;">
+            <div class="question-title">📍 实际检测的久坐时长（智能设备数据）</div>
+            <div class="options">
+                <div class="option" data-value="less-than-3">🕒 3小时以下</div>
+                <div class="option" data-value="3-5">🕒 3-5小时</div>
+                <div class="option" data-value="5-7">🕒 5-7小时</div>
+                <div class="option" data-value="more-than-7">🕒 7小时以上</div>
             </div>
         </div>
 
         <div class="question">
-            <div class="question-title">📍 今天你主动起身多少次？（不算上厕所）</div>
+            <div class="question-title">📍 今天导致你久坐的主要原因是什么？（可多选）</div>
             <div class="options">
-                <div class="option" data-value="0">0 次</div>
-                <div class="option" data-value="1-2">1-2 次</div>
-                <div class="option" data-value="3-5">3-5 次</div>
-                <div class="option" data-value="6-plus">6 次以上</div>
+                <div class="option" data-value="meeting">📊 会议无法中断</div>
+                <div class="option" data-value="focus">🎯 专注工作忘记时间</div>
+                <div class="option" data-value="position">💺 无法离开工作位置</div>
+                <div class="option" data-value="travel">🚗 长时间交通工具旅行</div>
+                <div class="option" data-value="lazy">😴 懒得起身</div>
+                <div class="option" data-value="entertainment">🎮 沉浸于娱乐（看剧、玩游戏等）</div>
+                <div class="option" data-value="mood">😔 情绪低落/疲劳</div>
+                <div class="option" data-value="other">📝 其他（请描述）</div>
             </div>
         </div>
 
         <div class="question">
-            <div class="question-title">📍 今天你因久坐感到身体不适的程度？（1-5分）</div>
+            <div class="question-title">📍 今天你主动起身的次数（不包括上厕所）</div>
+            <div class="options">
+                <div class="option" data-value="0">0次</div>
+                <div class="option" data-value="1-2">1-2次</div>
+                <div class="option" data-value="3-5">3-5次</div>
+                <div class="option" data-value="6-plus">6次以上</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 今天因久坐你是否感到身体不适？</div>
             <div class="rating-options">
-                <div class="rating-option" data-value="1">😌 1</div>
-                <div class="rating-option" data-value="2">😐 2</div>
-                <div class="rating-option" data-value="3">😬 3</div>
-                <div class="rating-option" data-value="4">😣 4</div>
-                <div class="rating-option" data-value="5">😖 5</div>
+                <div class="rating-option" data-value="0">😌 无不适</div>
+                <div class="rating-option" data-value="1">😐 1（轻微不适）</div>
+                <div class="rating-option" data-value="2">😬 2</div>
+                <div class="rating-option" data-value="3">😣 3</div>
+                <div class="rating-option" data-value="4">😖 4</div>
+                <div class="rating-option" data-value="5">😫 5（严重不适）</div>
             </div>
+        </div>
+
+        <div class="question" id="pain-locations" style="display: none;">
+            <div class="question-title">📍 疼痛部位（可多选）</div>
+            <div class="options">
+                <div class="option" data-value="back">🔄 腰部</div>
+                <div class="option" data-value="neck">🔄 颈部</div>
+                <div class="option" data-value="shoulder">🔄 肩膀</div>
+                <div class="option" data-value="eyes">👀 眼睛/视觉疲劳</div>
+                <div class="option" data-value="wrist">🔄 手腕/前臂</div>
+                <div class="option" data-value="legs">🦵 腿部</div>
+                <div class="option" data-value="other">📝 其他（请描述）</div>
+            </div>
+        </div>
+
+        <div class="question" id="emotions" style="display: none;">
+            <div class="question-title">📍 情绪标签（可选）</div>
+            <div class="options">
+                <div class="option" data-value="angry">😡 烦躁</div>
+                <div class="option" data-value="tired">😞 疲劳</div>
+                <div class="option" data-value="pain">😖 痛苦</div>
+                <div class="option" data-value="anxious">😩 焦虑</div>
+                <div class="option" data-value="numb">😐 麻木</div>
+                <div class="option" data-value="happy">😊 轻松</div>
+                <div class="option" data-value="relaxed">😅 放松</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">📍 今天你在工作中/学习中使用了什么方法来缓解身体不适（如有）？</div>
+            <div class="options">
+                <div class="option" data-value="stand">🔄 站立/走动</div>
+                <div class="option" data-value="stretch">🧘 做伸展运动</div>
+                <div class="option" data-value="cushion">💺 使用舒适坐垫或调整坐姿</div>
+                <div class="option" data-value="other">📝 其他（请描述）</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-title">💭 想说的话</div>
+            <textarea class="other-input" 
+                      placeholder="有什么想说的都可以写在这里..." 
+                      id="additional-thoughts" 
+                      style="height: 100px; resize: vertical;"
+                      rows="4"></textarea>
         </div>
 
         <button class="submit-btn" onclick="generateAndDownload()">生成报告并下载</button>
@@ -268,10 +343,16 @@
         <div class="report-content">
             <div class="report-item" id="report-date"></div>
             <div class="report-item" id="report-time"></div>
+            <div class="report-item" id="report-day-type"></div>
             <div class="report-item" id="report-duration"></div>
-            <div class="report-item" id="report-locations"></div>
+            <div class="report-item" id="report-device"></div>
+            <div class="report-item" id="report-reasons"></div>
             <div class="report-item" id="report-standup"></div>
             <div class="report-item" id="report-discomfort"></div>
+            <div class="report-item" id="report-pain"></div>
+            <div class="report-item" id="report-emotions"></div>
+            <div class="report-item" id="report-solutions"></div>
+            <div class="report-item" id="report-additional-thoughts"></div>
         </div>
         <div class="report-footer">
             💝 温馨提示：记得适时起身活动，保持健康哦！
@@ -294,6 +375,9 @@
                     parent.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
                 }
+
+                // 处理条件显示逻辑
+                handleConditionalDisplay();
             });
         });
 
@@ -303,16 +387,52 @@
                 const parent = this.parentElement;
                 parent.querySelectorAll('.rating-option').forEach(opt => opt.classList.remove('selected'));
                 this.classList.add('selected');
+                handleConditionalDisplay();
             });
         });
+
+        // 处理条件显示逻辑
+        function handleConditionalDisplay() {
+            // 处理智能设备监测问题
+            const deviceQuestion = document.querySelector('.question:nth-child(4)');
+            const deviceDurationQuestion = document.getElementById('device-duration-question');
+            const deviceYesOption = deviceQuestion.querySelector('[data-value="yes"]');
+            
+            if (deviceYesOption.classList.contains('selected')) {
+                deviceDurationQuestion.style.display = 'block';
+            } else {
+                deviceDurationQuestion.style.display = 'none';
+            }
+
+            // 处理不适程度相关的问题
+            const discomfortQuestion = document.querySelector('.question:nth-child(7)');
+            const painLocations = document.getElementById('pain-locations');
+            const emotions = document.getElementById('emotions');
+            const selectedDiscomfort = discomfortQuestion.querySelector('.rating-option.selected');
+            
+            if (selectedDiscomfort && parseInt(selectedDiscomfort.dataset.value) >= 2) {
+                painLocations.style.display = 'block';
+                emotions.style.display = 'block';
+            } else {
+                painLocations.style.display = 'none';
+                emotions.style.display = 'none';
+            }
+        }
 
         // 修改生成报告的函数
         async function generateAndDownload() {
             const answers = {
-                duration: getSelectedValue('.question:nth-child(2) .option'),
-                locations: getSelectedValues('.question:nth-child(3) .option'),
-                standUpTimes: getSelectedValue('.question:nth-child(4) .option'),
-                discomfortLevel: getSelectedValue('.rating-option')
+                dayType: getSelectedValue('.question:nth-child(2) .option'),
+                duration: getSelectedValue('.question:nth-child(3) .option'),
+                hasDevice: getSelectedValue('.question:nth-child(4) .option'),
+                deviceDuration: getSelectedValue('#device-duration-question .option'),
+                reasons: getSelectedValues('.question:nth-child(6) .option'),
+                standUpTimes: getSelectedValue('.question:nth-child(7) .option'),
+                discomfortLevel: getSelectedValue('.rating-option'),
+                painLocations: getSelectedValues('#pain-locations .option'),
+                emotions: getSelectedValues('#emotions .option'),
+                solutions: getSelectedValues('.question:nth-child(10) .option'),
+                additionalThoughts: document.getElementById('additional-thoughts').value
             };
 
             // 获取当前日期和时间
@@ -333,10 +453,16 @@
             // 更新报告内容
             document.getElementById('report-date').textContent = `📆 记录日期：${dateStr}`;
             document.getElementById('report-time').textContent = `⏰ 记录时间：${timeStr}`;
+            document.getElementById('report-day-type').textContent = `📅 日期类型：${answers.dayType || '未选择'}`;
             document.getElementById('report-duration').textContent = `📍 久坐总时长：${answers.duration || '未选择'}`;
-            document.getElementById('report-locations').textContent = `📍 久坐场景：${answers.locations.join(', ') || '未选择'}`;
+            document.getElementById('report-device').textContent = `📱 智能设备监测：${answers.hasDevice === '是' ? `是（${answers.deviceDuration || '未选择'}）` : '否'}`;
+            document.getElementById('report-reasons').textContent = `📝 久坐原因：${answers.reasons.join(', ') || '未选择'}`;
             document.getElementById('report-standup').textContent = `📍 主动起身次数：${answers.standUpTimes || '未选择'}`;
-            document.getElementById('report-discomfort').textContent = `📍 身体不适程度：${answers.discomfortLevel || '未选择'}`;
+            document.getElementById('report-discomfort').textContent = `😣 身体不适程度：${answers.discomfortLevel || '未选择'}`;
+            document.getElementById('report-pain').textContent = answers.painLocations.length > 0 ? `🔄 疼痛部位：${answers.painLocations.join(', ')}` : '';
+            document.getElementById('report-emotions').textContent = answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join(', ')}` : '';
+            document.getElementById('report-solutions').textContent = `💪 缓解方法：${answers.solutions.join(', ') || '未选择'}`;
+            document.getElementById('report-additional-thoughts').textContent = `💭 想说的话：${answers.additionalThoughts || '无'}`;
 
             // 显示加载提示
             document.querySelector('.loading').style.display = 'block';
@@ -381,6 +507,35 @@
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+
+                // 下载完成后显示分享选项
+                setTimeout(() => {
+                    const shareDialog = document.createElement('div');
+                    shareDialog.style.cssText = `
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: white;
+                        padding: 20px;
+                        border-radius: 15px;
+                        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                        z-index: 1000;
+                        text-align: center;
+                    `;
+                    shareDialog.innerHTML = `
+                        <h3 style="margin-bottom: 15px;">分享到微信</h3>
+                        <button onclick="shareToWeChat('${img}')" 
+                                style="background: #07C160; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                            打开微信
+                        </button>
+                        <button onclick="this.parentElement.remove()" 
+                                style="background: #f5f5f5; color: #666; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+                            取消
+                        </button>
+                    `;
+                    document.body.appendChild(shareDialog);
+                }, 1000);
             } catch (error) {
                 console.error('生成图片时出错:', error);
                 alert('生成图片时出错，请重试');
@@ -398,6 +553,43 @@
         function getSelectedValues(selector) {
             return Array.from(document.querySelectorAll(`${selector}.selected`))
                 .map(el => el.textContent.trim());
+        }
+
+        // 添加分享到微信的函数
+        async function shareToWeChat(imgDataUrl) {
+            try {
+                // 获取当前时间戳
+                const timestamp = new Date().getTime();
+                const fileName = `久坐情况报告_${timestamp}.png`;
+                
+                // 将base64图片转换为Blob
+                const response = await fetch(imgDataUrl);
+                const blob = await response.blob();
+                const file = new File([blob], fileName, { type: 'image/png' });
+                
+                // 尝试使用系统分享API
+                if (navigator.share) {
+                    await navigator.share({
+                        title: '久坐情况报告',
+                        text: '查看我的久坐情况报告',
+                        files: [file]
+                    });
+                } else {
+                    // 如果不支持系统分享API，尝试使用微信URL Scheme
+                    const wechatUrl = `weixin://dl/chat?scene=0&title=久坐情况报告&desc=查看我的久坐情况报告&url=${encodeURIComponent(window.location.href)}&imageUrl=${encodeURIComponent(imgDataUrl)}&timestamp=${timestamp}`;
+                    window.location.href = wechatUrl;
+                    
+                    // 如果3秒后还在当前页面，说明可能没有安装微信或打开失败
+                    setTimeout(() => {
+                        if (document.hidden === false) {
+                            alert('请确保已安装微信并登录');
+                        }
+                    }, 3000);
+                }
+            } catch (err) {
+                console.error('分享失败:', err);
+                alert('分享失败，请手动打开微信分享');
+            }
         }
     </script>
 </body>
