@@ -344,7 +344,7 @@
                       rows="4"></textarea>
         </div>
 
-        <button class="submit-btn" onclick="updateReport()">生成报告并下载</button>
+        <button class="submit-btn" onclick="generateReport()">生成报告并下载</button>
     </div>
 
     <div id="report-container">
@@ -449,8 +449,6 @@
                 }
 
                 handleConditionalDisplay();
-                // 每次选择后自动更新报告
-                updateReport();
             });
         });
 
@@ -460,13 +458,11 @@
                 parent.querySelectorAll('.rating-option').forEach(opt => opt.classList.remove('selected'));
                 this.classList.add('selected');
                 handleConditionalDisplay();
-                // 每次选择后自动更新报告
-                updateReport();
             });
         });
 
         // 监听文本输入框的变化
-        document.getElementById('additional-thoughts').addEventListener('input', updateReport);
+        document.getElementById('additional-thoughts').addEventListener('input', handleConditionalDisplay);
 
         function handleConditionalDisplay() {
             // 处理智能设备监测问题
@@ -495,7 +491,7 @@
             }
         }
 
-        async function updateReport() {
+        async function generateReport() {
             // 获取当前日期和时间
             const now = new Date();
             const dateStr = now.toLocaleDateString('zh-CN', {
@@ -513,16 +509,16 @@
 
             // 获取所有选中的选项
             const selectedOptions = {
-                dayType: document.querySelector('.question:nth-of-type(1) .option.selected'),
+                dayType: document.querySelector('.question:has(.question-title:contains("工作日还是休息日")) .option.selected'),
                 duration: document.querySelector('#duration-question .option.selected'),
-                hasDevice: document.querySelector('.question:nth-of-type(3) .option.selected'),
+                hasDevice: document.querySelector('.question:has(.question-title:contains("是否有智能手环")) .option.selected'),
                 deviceDuration: document.querySelector('#device-duration-question .option.selected'),
-                reasons: document.querySelectorAll('.question:nth-of-type(5) .option.selected'),
-                standUpTimes: document.querySelector('.question:nth-of-type(6) .option.selected'),
-                discomfortLevel: document.querySelector('.question:nth-of-type(7) .rating-option.selected'),
+                reasons: document.querySelectorAll('.question:has(.question-title:contains("导致你久坐的主要原因")) .option.selected'),
+                standUpTimes: document.querySelector('.question:has(.question-title:contains("主动起身的次数")) .option.selected'),
+                discomfortLevel: document.querySelector('.question:has(.question-title:contains("是否感到身体不适")) .rating-option.selected'),
                 painLocations: document.querySelectorAll('#pain-locations .option.selected'),
                 emotions: document.querySelectorAll('#emotions .option.selected'),
-                solutions: document.querySelectorAll('.question:nth-of-type(8) .option.selected'),
+                solutions: document.querySelectorAll('.question:has(.question-title:contains("缓解身体不适")) .option.selected'),
                 additionalThoughts: document.getElementById('additional-thoughts').value
             };
 
