@@ -425,7 +425,7 @@
             const answers = {};
 
             // 1. 日期类型
-            const dayTypeQuestion = document.querySelector('.question:nth-child(1)');
+            const dayTypeQuestion = document.querySelector('.question');
             if (dayTypeQuestion) {
                 const selectedOption = dayTypeQuestion.querySelector('.option.selected');
                 answers.dayType = selectedOption ? selectedOption.textContent.trim() : '未选择';
@@ -439,7 +439,7 @@
             }
 
             // 3. 智能设备监测
-            const deviceQuestion = document.querySelector('.question:nth-child(3)');
+            const deviceQuestion = document.querySelector('.question:nth-of-type(3)');
             if (deviceQuestion) {
                 const selectedOption = deviceQuestion.querySelector('.option.selected');
                 answers.hasDevice = selectedOption ? selectedOption.textContent.trim() : '未选择';
@@ -453,21 +453,21 @@
             }
 
             // 5. 久坐原因
-            const reasonsQuestion = document.querySelector('.question:nth-child(5)');
+            const reasonsQuestion = document.querySelector('.question:nth-of-type(5)');
             if (reasonsQuestion) {
                 const selectedOptions = reasonsQuestion.querySelectorAll('.option.selected');
                 answers.reasons = Array.from(selectedOptions).map(opt => opt.textContent.trim());
             }
 
             // 6. 起身次数
-            const standUpQuestion = document.querySelector('.question:nth-child(6)');
+            const standUpQuestion = document.querySelector('.question:nth-of-type(6)');
             if (standUpQuestion) {
                 const selectedOption = standUpQuestion.querySelector('.option.selected');
                 answers.standUpTimes = selectedOption ? selectedOption.textContent.trim() : '未选择';
             }
 
             // 7. 不适程度
-            const discomfortQuestion = document.querySelector('.question:nth-child(7)');
+            const discomfortQuestion = document.querySelector('.question:nth-of-type(7)');
             if (discomfortQuestion) {
                 const selectedOption = discomfortQuestion.querySelector('.rating-option.selected');
                 answers.discomfortLevel = selectedOption ? selectedOption.textContent.trim() : '未选择';
@@ -488,7 +488,7 @@
             }
 
             // 10. 缓解方法
-            const solutionsQuestion = document.querySelector('.question:nth-child(8)');
+            const solutionsQuestion = document.querySelector('.question:nth-of-type(8)');
             if (solutionsQuestion) {
                 const selectedOptions = solutionsQuestion.querySelectorAll('.option.selected');
                 answers.solutions = Array.from(selectedOptions).map(opt => opt.textContent.trim());
@@ -496,6 +496,11 @@
 
             // 11. 额外想法
             answers.additionalThoughts = document.getElementById('additional-thoughts').value || '无';
+
+            // 调试信息
+            console.log('日期类型:', answers.dayType);
+            console.log('久坐原因:', answers.reasons);
+            console.log('不适程度:', answers.discomfortLevel);
 
             // 获取当前日期和时间
             const now = new Date();
