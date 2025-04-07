@@ -432,9 +432,21 @@
                 discomfortLevel: getSelectedValue('.question:nth-child(7) .rating-option'),
                 painLocations: getSelectedValues('#pain-locations .option'),
                 emotions: getSelectedValues('#emotions .option'),
-                solutions: getSelectedValues('.question:nth-child(9) .option'),
+                solutions: getSelectedValues('.question:has(.question-title:contains("今天你在工作中/学习中使用了什么方法来缓解身体不适")) .option'),
                 additionalThoughts: document.getElementById('additional-thoughts').value
             };
+
+            // 如果上面的方法没有获取到解决方案，尝试另一种方法
+            if (!answers.solutions || answers.solutions.length === 0) {
+                const allQuestions = document.querySelectorAll('.question');
+                for (let question of allQuestions) {
+                    const title = question.querySelector('.question-title');
+                    if (title && title.textContent.includes('今天你在工作中/学习中使用了什么方法来缓解身体不适')) {
+                        answers.solutions = getSelectedValues('.option', question);
+                        break;
+                    }
+                }
+            }
 
             // 处理其他选项的文本
             if (answers.reasons.includes('📝 其他（请描述）') && answers.otherReason) {
@@ -562,8 +574,8 @@
             return selected ? selected.textContent.trim() : '';
         }
 
-        function getSelectedValues(selector) {
-            return Array.from(document.querySelectorAll(`${selector}.selected`))
+        function getSelectedValues(selector, parent = document) {
+            return Array.from(parent.querySelectorAll(`${selector}.selected`))
                 .map(el => el.textContent.trim());
         }
 
