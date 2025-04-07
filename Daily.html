@@ -432,7 +432,7 @@
                 discomfortLevel: getSelectedValue('.question:nth-child(7) .rating-option'),
                 painLocations: getSelectedValues('#pain-locations .option'),
                 emotions: getSelectedValues('#emotions .option'),
-                solutions: getSelectedValues('.question:nth-child(11) .option'),
+                solutions: getSelectedValues('.question:nth-child(8) .option'),
                 additionalThoughts: document.getElementById('additional-thoughts').value
             };
 
@@ -569,8 +569,8 @@
             }
         }
 
-        function getSelectedValue(selector) {
-            const selected = document.querySelector(`${selector}.selected`);
+        function getSelectedValue(selector, parent = document) {
+            const selected = parent.querySelector(`${selector}.selected`);
             return selected ? selected.textContent.trim() : '';
         }
 
