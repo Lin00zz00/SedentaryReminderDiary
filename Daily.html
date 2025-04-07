@@ -445,7 +445,6 @@
         </div>
         <div class="report-footer">
             💝 温馨提示：记得适时起身活动，保持健康哦！
-            <button class="share-btn" onclick="showShareQRCode()">分享到微信</button>
         </div>
     </div>
 
@@ -555,7 +554,7 @@
 
         function handleConditionalDisplay() {
             // 处理智能设备监测问题
-            const deviceQuestion = document.querySelector('.question:nth-of-type(3)');
+            const deviceQuestion = document.getElementById('device-question');
             const deviceDurationQuestion = document.getElementById('device-duration-question');
             const deviceYesOption = deviceQuestion.querySelector('[data-value="yes"]');
             
@@ -566,7 +565,7 @@
             }
 
             // 处理不适程度相关的问题
-            const discomfortQuestion = document.querySelector('.question:nth-of-type(7)');
+            const discomfortQuestion = document.getElementById('discomfort-question');
             const painLocations = document.getElementById('pain-locations');
             const emotions = document.getElementById('emotions');
             const selectedDiscomfort = discomfortQuestion.querySelector('.rating-option.selected');
