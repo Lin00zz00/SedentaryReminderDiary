@@ -403,23 +403,43 @@
 
         // 修改生成报告的函数
         async function generateAndDownload() {
+            // 获取所有问题的答案
             const answers = {
-                duration: getSelectedValue('.question:nth-child(2) .option'),
-                reasons: getSelectedValues('.question:nth-child(3) .option'),
+                sittingDuration: getSelectedValue('.container .question:nth-child(2) .option'),
+                reasons: getSelectedValues('.container .question:nth-child(3) .option'),
                 otherReason: document.getElementById('other-reason').value,
-                mood: getSelectedValue('.question:nth-child(4) .rating-option'),
-                accept: getSelectedValue('.question:nth-child(5) .option'),
-                task: getSelectedValue('.question:nth-child(6) .option'),
+                mood: getSelectedValue('.container .question:nth-child(4) .option'),
+                accept: getSelectedValue('.container .question:nth-child(5) .option'),
+                task: getSelectedValue('.container .question:nth-child(6) .option'),
                 otherTask: document.getElementById('other-task').value,
-                activity: getSelectedValues('.question:nth-child(7) .option'),
+                activity: getSelectedValues('.container .question:nth-child(7) .option'),
                 otherActivity: document.getElementById('other-activity').value,
-                duration: getSelectedValue('.question:nth-child(8) .option'),
-                status: getSelectedValue('.question:nth-child(9) .option'),
+                activityDuration: getSelectedValue('.container .question:nth-child(8) .option'),
+                status: getSelectedValue('.container .question:nth-child(9) .option'),
                 otherStatus: document.getElementById('other-status').value,
-                alone: getSelectedValue('.question:nth-child(10) .option'),
-                pressure: getSelectedValue('.question:nth-child(11) .option'),
+                alone: getSelectedValue('.container .question:nth-child(10) .option'),
+                pressure: getSelectedValue('.container .question:nth-child(11) .option'),
                 additionalThoughts: document.getElementById('additional-thoughts').value
             };
+
+            // 处理其他选项的文本
+            if (answers.reasons.includes('👉 其他') && answers.otherReason) {
+                const index = answers.reasons.indexOf('👉 其他');
+                answers.reasons[index] = answers.otherReason;
+            }
+            
+            if (answers.task === '其他' && answers.otherTask) {
+                answers.task = answers.otherTask;
+            }
+            
+            if (answers.activity.includes('其他') && answers.otherActivity) {
+                const index = answers.activity.indexOf('其他');
+                answers.activity[index] = answers.otherActivity;
+            }
+            
+            if (answers.status === '其他' && answers.otherStatus) {
+                answers.status = answers.otherStatus;
+            }
 
             // 获取当前日期和时间
             const now = new Date();
@@ -436,26 +456,34 @@
                 hour12: false
             });
 
-            // 更新报告内容
-            document.getElementById('report-date').textContent = `📆 记录日期：${dateStr}`;
-            document.getElementById('report-time').textContent = `⏰ 记录时间：${timeStr}`;
-            document.getElementById('report-duration').textContent = `📍 连续久坐时长：${answers.duration || '未选择'}`;
-            
-            let reasonsText = answers.reasons.join(', ');
-            if (answers.reasons.includes('其他') && answers.otherReason) {
-                reasonsText = reasonsText.replace('其他', answers.otherReason);
-            }
-            document.getElementById('report-reason').textContent = `📍 起身原因：${reasonsText || '未选择'}`;
-            
-            document.getElementById('report-status').textContent = `📍 身体状态：${answers.status || '未选择'}`;
-            document.getElementById('report-mood').textContent = `📍 提醒心情：${answers.mood || '未选择'}`;
-            
-            let activityText = answers.activity.join(', ');
-            if (answers.activity.includes('其他') && answers.otherActivity) {
-                activityText = activityText.replace('其他', answers.otherActivity);
-            }
-            document.getElementById('report-activity').textContent = `📍 起身活动：${activityText || '未选择'}`;
-            document.getElementById('report-additional-thoughts').textContent = `💭 想说的话：${answers.additionalThoughts || '无'}`;
+            // 创建所有报告项
+            const reportItems = [
+                { label: '📆 记录日期', value: dateStr },
+                { label: '⏰ 记录时间', value: timeStr },
+                { label: '📍 连续久坐时长', value: answers.sittingDuration || '未选择' },
+                { label: '📍 起身原因', value: answers.reasons.length > 0 ? answers.reasons.join('、') : '未选择' },
+                { label: '📍 提醒心情', value: answers.mood || '未选择' },
+                { label: '📍 提醒方式接受度', value: answers.accept || '未选择' },
+                { label: '📍 当前活动', value: answers.task || '未选择' },
+                { label: '📍 起身后做了什么', value: answers.activity.length > 0 ? answers.activity.join('、') : '未选择' },
+                { label: '📍 活动持续时间', value: answers.activityDuration || '未选择' },
+                { label: '📍 返回座位后状态', value: answers.status || '未选择' },
+                { label: '📍 是否独处', value: answers.alone || '未选择' },
+                { label: '📍 社会压力', value: answers.pressure || '未选择' },
+                { label: '💭 想说的话', value: answers.additionalThoughts || '无' }
+            ];
+
+            // 清空报告内容
+            const reportContent = document.querySelector('.report-content');
+            reportContent.innerHTML = '';
+
+            // 添加所有报告项到报告内容中
+            reportItems.forEach(item => {
+                const element = document.createElement('div');
+                element.className = 'report-item';
+                element.textContent = `${item.label}：${item.value}`;
+                reportContent.appendChild(element);
+            });
 
             // 显示加载提示
             document.querySelector('.loading').style.display = 'block';
