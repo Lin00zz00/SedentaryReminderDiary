@@ -423,16 +423,16 @@
         async function generateAndDownload() {
             // 获取所有问题的答案
             const answers = {
-                dayType: getSelectedValue('.container .question:nth-child(2) .option'),
-                duration: getSelectedValue('.container .question:nth-child(3) .option'),
-                hasDevice: getSelectedValue('.container .question:nth-child(4) .option'),
+                dayType: getSelectedValue('.question:nth-child(1) .option'),
+                duration: getSelectedValue('#duration-question .option'),
+                hasDevice: getSelectedValue('.question:nth-child(3) .option'),
                 deviceDuration: getSelectedValue('#device-duration-question .option'),
-                reasons: getSelectedValues('.container .question:nth-child(6) .option'),
-                standUpTimes: getSelectedValue('.container .question:nth-child(7) .option'),
-                discomfortLevel: getSelectedValue('.container .question:nth-child(8) .rating-option'),
+                reasons: getSelectedValues('.question:nth-child(5) .option'),
+                standUpTimes: getSelectedValue('.question:nth-child(6) .option'),
+                discomfortLevel: getSelectedValue('.question:nth-child(7) .rating-option'),
                 painLocations: getSelectedValues('#pain-locations .option'),
                 emotions: getSelectedValues('#emotions .option'),
-                solutions: getSelectedValues('.container .question:nth-child(12) .option'),
+                solutions: getSelectedValues('.question:nth-child(10) .option'),
                 additionalThoughts: document.getElementById('additional-thoughts').value
             };
 
