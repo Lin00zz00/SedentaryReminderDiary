@@ -510,36 +510,31 @@
             
             // 获取所有问题的答案
             const answers = {
-                dayType: getSelectedValue('.question:has(.question-title:contains("工作日还是休息日")) .option.selected'),
+                dayType: getSelectedValue('[data-value="workday"], [data-value="restday"]'),
                 duration: getSelectedValue('#duration-question .option.selected'),
-                hasDevice: getSelectedValue('.question:has(.question-title:contains("是否有智能手环")) .option.selected'),
+                hasDevice: getSelectedValue('[data-value="yes"], [data-value="no"]'),
                 deviceDuration: getSelectedValue('#device-duration-question .option.selected'),
-                reasons: getSelectedValues('.question:has(.question-title:contains("导致你久坐的主要原因")) .option.selected'),
-                standUpTimes: getSelectedValue('.question:has(.question-title:contains("主动起身的次数")) .option.selected'),
-                discomfortLevel: getSelectedValue('.question:has(.question-title:contains("是否感到身体不适")) .rating-option.selected'),
+                reasons: getSelectedValues('[data-value="meeting"], [data-value="focus"], [data-value="position"], [data-value="travel"], [data-value="lazy"], [data-value="entertainment"], [data-value="mood"], [data-value="other"]'),
+                standUpTimes: getSelectedValue('[data-value="0"], [data-value="1-2"], [data-value="3-5"], [data-value="6-plus"]'),
+                discomfortLevel: getSelectedValue('.rating-option.selected'),
                 painLocations: getSelectedValues('#pain-locations .option.selected'),
                 emotions: getSelectedValues('#emotions .option.selected'),
-                solutions: getSelectedValues('.question:has(.question-title:contains("缓解身体不适")) .option.selected'),
+                solutions: getSelectedValues('[data-value="stand"], [data-value="stretch"], [data-value="cushion"], [data-value="other"]'),
                 additionalThoughts: document.getElementById('additional-thoughts').value
             };
 
             console.log('收集到的所有答案:', answers);
 
             // 处理其他选项的文本
-            const otherReasonInput = document.querySelector('.question:has(.question-title:contains("导致你久坐的主要原因")) .other-input');
-            const otherSolutionInput = document.querySelector('.question:has(.question-title:contains("缓解身体不适")) .other-input');
-            
-            console.log('其他原因输入框:', otherReasonInput);
-            console.log('其他解决方案输入框:', otherSolutionInput);
+            const otherReasonInput = document.querySelector('.question:has([data-value="other"]) .other-input');
+            const otherSolutionInput = document.querySelector('.question:has([data-value="other"]) .other-input');
             
             if (answers.reasons.includes('📝 其他（请描述）') && otherReasonInput && otherReasonInput.value) {
-                console.log('处理其他原因:', otherReasonInput.value);
                 const index = answers.reasons.indexOf('📝 其他（请描述）');
                 answers.reasons[index] = otherReasonInput.value;
             }
             
             if (answers.solutions.includes('📝 其他（请描述）') && otherSolutionInput && otherSolutionInput.value) {
-                console.log('处理其他解决方案:', otherSolutionInput.value);
                 const index = answers.solutions.indexOf('📝 其他（请描述）');
                 answers.solutions[index] = otherSolutionInput.value;
             }
@@ -579,48 +574,53 @@ ${answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join('�
 💝 温馨提示：记得适时起身活动，保持健康哦！
             `.trim();
 
-            console.log('生成的报告文本:', reportText);
+            // 显示报告容器并更新内容
+            const reportContainer = document.getElementById('report-container');
+            reportContainer.style.display = 'block';
+            reportContainer.style.position = 'fixed';
+            reportContainer.style.top = '50%';
+            reportContainer.style.left = '50%';
+            reportContainer.style.transform = 'translate(-50%, -50%)';
+            
+            // 更新报告内容
+            document.getElementById('report-date').textContent = `📆 记录日期：${dateStr}`;
+            document.getElementById('report-time').textContent = `⏰ 记录时间：${timeStr}`;
+            document.getElementById('report-day-type').textContent = `📅 日期类型：${answers.dayType || '未选择'}`;
+            document.getElementById('report-duration').textContent = `📍 久坐总时长：${answers.duration || '未选择'}`;
+            document.getElementById('report-device').textContent = `📱 智能设备监测：${answers.hasDevice === '✅ 是' ? `是（${answers.deviceDuration || '未选择'}）` : '否'}`;
+            document.getElementById('report-reasons').textContent = `📝 久坐原因：${answers.reasons.length > 0 ? answers.reasons.join('、') : '未选择'}`;
+            document.getElementById('report-standup').textContent = `📍 主动起身次数：${answers.standUpTimes || '未选择'}`;
+            document.getElementById('report-discomfort').textContent = `😣 身体不适程度：${answers.discomfortLevel || '未选择'}`;
+            document.getElementById('report-pain').textContent = answers.painLocations.length > 0 ? `🔄 疼痛部位：${answers.painLocations.join('、')}` : '';
+            document.getElementById('report-emotions').textContent = answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join('、')}` : '';
+            document.getElementById('report-solutions').textContent = `💪 缓解方法：${answers.solutions.length > 0 ? answers.solutions.join('、') : '未选择'}`;
+            document.getElementById('report-additional-thoughts').textContent = `💭 想说的话：${answers.additionalThoughts || '无'}`;
 
-            // 创建并下载文本文件
-            const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `久坐情况报告_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
+            // 显示加载提示
+            document.querySelector('.loading').style.display = 'block';
 
-            // 显示分享选项
-            setTimeout(() => {
-                const shareDialog = document.createElement('div');
-                shareDialog.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: white;
-                    padding: 20px;
-                    border-radius: 15px;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                    z-index: 1000;
-                    text-align: center;
-                `;
-                shareDialog.innerHTML = `
-                    <h3 style="margin-bottom: 15px;">分享到微信</h3>
-                    <p style="margin-bottom: 15px;">报告已生成，请复制以下内容分享：</p>
-                    <textarea style="width: 100%; height: 200px; margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${reportText}</textarea>
-                    <button onclick="navigator.clipboard.writeText('${reportText.replace(/'/g, "\\'")}').then(() => alert('已复制到剪贴板！'))" 
-                            style="background: #07C160; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-                        复制内容
-                    </button>
-                    <button onclick="this.parentElement.remove()" 
-                            style="background: #f5f5f5; color: #666; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">
-                        关闭
-                    </button>
-                `;
-                document.body.appendChild(shareDialog);
-            }, 1000);
+            try {
+                // 使用 html2canvas 生成图片
+                const canvas = await html2canvas(reportContainer, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+
+                // 创建下载链接
+                const link = document.createElement('a');
+                link.download = `久坐情况报告_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                // 隐藏加载提示和报告容器
+                document.querySelector('.loading').style.display = 'none';
+                reportContainer.style.display = 'none';
+            } catch (error) {
+                console.error('生成图片时出错:', error);
+                document.querySelector('.loading').style.display = 'none';
+                alert('生成图片时出错，请重试');
+            }
         }
     </script>
 </body>
