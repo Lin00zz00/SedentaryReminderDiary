@@ -224,7 +224,7 @@
             <h1>📅 每日久坐情况调查</h1>
         </div>
 
-        <div class="question">
+        <div class="question" id="day-type-question">
             <div class="question-title">📍 今天是工作日还是休息日？</div>
             <div class="options">
                 <div class="option" data-value="workday">🏢 工作日</div>
@@ -242,7 +242,7 @@
             </div>
         </div>
 
-        <div class="question">
+        <div class="question" id="device-question">
             <div class="question-title">📍 是否有智能手环/手机等客观设备监测久坐时间？</div>
             <div class="options">
                 <div class="option" data-value="yes">✅ 是</div>
@@ -260,7 +260,7 @@
             </div>
         </div>
 
-        <div class="question">
+        <div class="question" id="reasons-question">
             <div class="question-title">📍 今天导致你久坐的主要原因是什么？（可多选）</div>
             <div class="options">
                 <div class="option" data-value="meeting">📊 会议无法中断</div>
@@ -275,7 +275,7 @@
             </div>
         </div>
 
-        <div class="question">
+        <div class="question" id="standup-question">
             <div class="question-title">📍 今天你主动起身的次数（不包括上厕所）</div>
             <div class="options">
                 <div class="option" data-value="0">0次</div>
@@ -285,7 +285,7 @@
             </div>
         </div>
 
-        <div class="question">
+        <div class="question" id="discomfort-question">
             <div class="question-title">📍 今天因久坐你是否感到身体不适？</div>
             <div class="rating-options">
                 <div class="rating-option" data-value="0">😌 无不适</div>
@@ -324,7 +324,7 @@
             </div>
         </div>
 
-        <div class="question">
+        <div class="question" id="solutions-question">
             <div class="question-title">📍 今天你在工作中/学习中使用了什么方法来缓解身体不适（如有）？</div>
             <div class="options">
                 <div class="option" data-value="stand">🔄 站立/走动</div>
@@ -466,7 +466,7 @@
 
         function handleConditionalDisplay() {
             // 处理智能设备监测问题
-            const deviceQuestion = document.querySelector('.question:nth-of-type(3)');
+            const deviceQuestion = document.getElementById('device-question');
             const deviceDurationQuestion = document.getElementById('device-duration-question');
             const deviceYesOption = deviceQuestion.querySelector('[data-value="yes"]');
             
@@ -477,7 +477,7 @@
             }
 
             // 处理不适程度相关的问题
-            const discomfortQuestion = document.querySelector('.question:nth-of-type(7)');
+            const discomfortQuestion = document.getElementById('discomfort-question');
             const painLocations = document.getElementById('pain-locations');
             const emotions = document.getElementById('emotions');
             const selectedDiscomfort = discomfortQuestion.querySelector('.rating-option.selected');
