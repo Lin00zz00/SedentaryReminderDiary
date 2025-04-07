@@ -487,7 +487,31 @@
             }
         }
 
-        // 修改生成报告的函数
+        function getSelectedValue(selector) {
+            const selected = document.querySelector(`${selector}.selected`);
+            if (!selected) return '';
+            // 从data-value获取实际值
+            const value = selected.dataset.value;
+            // 从valueMappings中获取对应的显示文本
+            const category = selector.split(' ')[0].replace('.', '');
+            if (valueMappings[category] && valueMappings[category][value]) {
+                return valueMappings[category][value];
+            }
+            return selected.textContent.trim();
+        }
+
+        function getSelectedValues(selector) {
+            const selectedElements = document.querySelectorAll(`${selector}.selected`);
+            return Array.from(selectedElements).map(el => {
+                const value = el.dataset.value;
+                const category = selector.split(' ')[0].replace('.', '');
+                if (valueMappings[category] && valueMappings[category][value]) {
+                    return valueMappings[category][value];
+                }
+                return el.textContent.trim();
+            });
+        }
+
         async function generateAndDownload() {
             // 获取所有问题的答案
             const answers = {
@@ -508,13 +532,13 @@
             const otherReasonInput = document.querySelector('.question:nth-of-type(5) .other-input');
             const otherSolutionInput = document.querySelector('.question:nth-of-type(8) .other-input');
             
-            if (answers.reasons.includes('📝 其他（请描述）') && otherReasonInput && otherReasonInput.value) {
-                const index = answers.reasons.indexOf('📝 其他（请描述）');
+            if (answers.reasons.includes('📝 其他') && otherReasonInput && otherReasonInput.value) {
+                const index = answers.reasons.indexOf('📝 其他');
                 answers.reasons[index] = otherReasonInput.value;
             }
             
-            if (answers.solutions.includes('📝 其他（请描述）') && otherSolutionInput && otherSolutionInput.value) {
-                const index = answers.solutions.indexOf('📝 其他（请描述）');
+            if (answers.solutions.includes('📝 其他') && otherSolutionInput && otherSolutionInput.value) {
+                const index = answers.solutions.indexOf('📝 其他');
                 answers.solutions[index] = otherSolutionInput.value;
             }
 
@@ -593,16 +617,6 @@ ${answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join('�
                 `;
                 document.body.appendChild(shareDialog);
             }, 1000);
-        }
-
-        function getSelectedValue(selector) {
-            const selected = document.querySelector(`${selector}.selected`);
-            return selected ? selected.textContent.trim() : '';
-        }
-
-        function getSelectedValues(selector) {
-            return Array.from(document.querySelectorAll(`${selector}.selected`))
-                .map(el => el.textContent.trim());
         }
     </script>
 </body>
