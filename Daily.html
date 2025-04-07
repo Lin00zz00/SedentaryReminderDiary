@@ -276,6 +276,24 @@
             width: 200px;
             height: 200px;
         }
+        
+        .wechat-btn {
+            background: #07C160;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+        }
+        
+        .wechat-btn:hover {
+            background: #06ae56;
+        }
     </style>
 </head>
 <body>
@@ -439,10 +457,10 @@
             <h2>分享到微信</h2>
             <p>请使用微信扫描下方二维码分享</p>
             <div id="qrcode"></div>
+            <button class="wechat-btn" onclick="openInWechat()">打开微信发送</button>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
     <script>
         const valueMappings = {
             dayType: {
@@ -537,7 +555,7 @@
 
         function handleConditionalDisplay() {
             // 处理智能设备监测问题
-            const deviceQuestion = document.getElementById('device-question');
+            const deviceQuestion = document.querySelector('.question:nth-of-type(3)');
             const deviceDurationQuestion = document.getElementById('device-duration-question');
             const deviceYesOption = deviceQuestion.querySelector('[data-value="yes"]');
             
@@ -548,7 +566,7 @@
             }
 
             // 处理不适程度相关的问题
-            const discomfortQuestion = document.getElementById('discomfort-question');
+            const discomfortQuestion = document.querySelector('.question:nth-of-type(7)');
             const painLocations = document.getElementById('pain-locations');
             const emotions = document.getElementById('emotions');
             const selectedDiscomfort = discomfortQuestion.querySelector('.rating-option.selected');
@@ -631,9 +649,17 @@
                 link.href = canvas.toDataURL('image/png');
                 link.click();
 
+                // 保存最近生成的图片URL (用于分享)
+                window.lastReportImageUrl = link.href;
+                
                 // 隐藏加载提示和报告容器
                 document.querySelector('.loading').style.display = 'none';
                 reportContainer.style.display = 'none';
+                
+                // 自动显示分享模态窗口
+                setTimeout(() => {
+                    showShareQRCode();
+                }, 500);
             } catch (error) {
                 console.error('生成图片时出错:', error);
                 document.querySelector('.loading').style.display = 'none';
@@ -667,6 +693,28 @@
 
         function closeShareModal() {
             document.getElementById('share-modal').style.display = 'none';
+        }
+        
+        function openInWechat() {
+            // 尝试使用微信URL Scheme
+            try {
+                // 对于移动设备
+                if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    // 尝试使用微信的URL Scheme打开微信
+                    window.location.href = 'weixin://';
+                    
+                    // 提示用户如何分享
+                    setTimeout(() => {
+                        alert('请在微信中点击右上角菜单，选择"分享到朋友圈"或"发送给朋友"，然后选择刚才下载的图片进行分享。');
+                    }, 1000);
+                } else {
+                    // 对于桌面设备，提供说明
+                    alert('请在手机上打开微信，通过"扫一扫"功能扫描二维码，或手动分享刚才下载的图片。');
+                }
+            } catch (e) {
+                console.error('打开微信失败', e);
+                alert('无法自动打开微信，请手动打开微信并分享刚才下载的图片。');
+            }
         }
 
         // 点击模态框外部关闭
