@@ -533,99 +533,66 @@
                 hour12: false
             });
 
-            // 更新报告内容
-            document.getElementById('report-date').textContent = `📆 记录日期：${dateStr}`;
-            document.getElementById('report-time').textContent = `⏰ 记录时间：${timeStr}`;
-            document.getElementById('report-day-type').textContent = `📅 日期类型：${answers.dayType || '未选择'}`;
-            document.getElementById('report-duration').textContent = `📍 久坐总时长：${answers.duration || '未选择'}`;
-            document.getElementById('report-device').textContent = `📱 智能设备监测：${answers.hasDevice === '✅ 是' ? `是（${answers.deviceDuration || '未选择'}）` : '否'}`;
-            document.getElementById('report-reasons').textContent = `📝 久坐原因：${answers.reasons.length > 0 ? answers.reasons.join('、') : '未选择'}`;
-            document.getElementById('report-standup').textContent = `📍 主动起身次数：${answers.standUpTimes || '未选择'}`;
-            document.getElementById('report-discomfort').textContent = `😣 身体不适程度：${answers.discomfortLevel || '未选择'}`;
-            document.getElementById('report-pain').textContent = answers.painLocations.length > 0 ? `🔄 疼痛部位：${answers.painLocations.join('、')}` : '';
-            document.getElementById('report-emotions').textContent = answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join('、')}` : '';
-            document.getElementById('report-solutions').textContent = `💪 缓解方法：${answers.solutions.length > 0 ? answers.solutions.join('、') : '未选择'}`;
-            document.getElementById('report-additional-thoughts').textContent = `💭 想说的话：${answers.additionalThoughts || '无'}`;
+            // 生成报告文本
+            const reportText = `
+📅 每日久坐情况报告
 
-            // 显示加载提示
-            document.querySelector('.loading').style.display = 'block';
+📆 记录日期：${dateStr}
+⏰ 记录时间：${timeStr}
+📅 日期类型：${answers.dayType || '未选择'}
+📍 久坐总时长：${answers.duration || '未选择'}
+📱 智能设备监测：${answers.hasDevice === '✅ 是' ? `是（${answers.deviceDuration || '未选择'}）` : '否'}
+📝 久坐原因：${answers.reasons.length > 0 ? answers.reasons.join('、') : '未选择'}
+📍 主动起身次数：${answers.standUpTimes || '未选择'}
+😣 身体不适程度：${answers.discomfortLevel || '未选择'}
+${answers.painLocations.length > 0 ? `🔄 疼痛部位：${answers.painLocations.join('、')}` : ''}
+${answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join('、')}` : ''}
+💪 缓解方法：${answers.solutions.length > 0 ? answers.solutions.join('、') : '未选择'}
+💭 想说的话：${answers.additionalThoughts || '无'}
 
-            try {
-                // 临时显示报告容器
-                const reportContainer = document.getElementById('report-container');
-                reportContainer.style.display = 'block';
-                reportContainer.style.top = '0';
-                reportContainer.style.left = '0';
-                reportContainer.style.position = 'fixed';
-                reportContainer.style.width = '100%';
-                reportContainer.style.height = '100%';
-                reportContainer.style.overflow = 'auto';
-                reportContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+💝 温馨提示：记得适时起身活动，保持健康哦！
+            `.trim();
 
-                // 生成图片
-                const canvas = await html2canvas(reportContainer, {
-                    scale: 2,
-                    useCORS: true,
-                    backgroundColor: '#ffffff',
-                    logging: false,
-                    width: 600,
-                    height: reportContainer.scrollHeight
-                });
+            // 创建并下载文本文件
+            const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `久坐情况报告_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
 
-                // 恢复报告容器样式
-                reportContainer.style.display = 'none';
-                reportContainer.style.top = '-9999px';
-                reportContainer.style.left = '-9999px';
-                reportContainer.style.position = 'fixed';
-                reportContainer.style.width = '600px';
-                reportContainer.style.height = 'auto';
-                reportContainer.style.overflow = 'visible';
-                reportContainer.style.backgroundColor = '#ffffff';
-
-                // 转换为图片并下载
-                const img = canvas.toDataURL('image/png');
-                const a = document.createElement('a');
-                a.href = img;
-                a.download = `久坐情况报告_${dateStr.replace(/\s+/g, '_')}_${timeStr.replace(/:/g, '-')}.png`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-
-                // 下载完成后显示分享选项
-                setTimeout(() => {
-                    const shareDialog = document.createElement('div');
-                    shareDialog.style.cssText = `
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        background: white;
-                        padding: 20px;
-                        border-radius: 15px;
-                        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                        z-index: 1000;
-                        text-align: center;
-                    `;
-                    shareDialog.innerHTML = `
-                        <h3 style="margin-bottom: 15px;">分享到微信</h3>
-                        <button onclick="shareToWeChat('${img}')" 
-                                style="background: #07C160; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-                            打开微信
-                        </button>
-                        <button onclick="this.parentElement.remove()" 
-                                style="background: #f5f5f5; color: #666; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">
-                            取消
-                        </button>
-                    `;
-                    document.body.appendChild(shareDialog);
-                }, 1000);
-            } catch (error) {
-                console.error('生成图片时出错:', error);
-                alert('生成图片时出错，请重试');
-            } finally {
-                // 隐藏加载提示
-                document.querySelector('.loading').style.display = 'none';
-            }
+            // 显示分享选项
+            setTimeout(() => {
+                const shareDialog = document.createElement('div');
+                shareDialog.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    padding: 20px;
+                    border-radius: 15px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    text-align: center;
+                `;
+                shareDialog.innerHTML = `
+                    <h3 style="margin-bottom: 15px;">分享到微信</h3>
+                    <p style="margin-bottom: 15px;">报告已生成，请复制以下内容分享：</p>
+                    <textarea style="width: 100%; height: 200px; margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${reportText}</textarea>
+                    <button onclick="navigator.clipboard.writeText('${reportText.replace(/'/g, "\\'")}').then(() => alert('已复制到剪贴板！'))" 
+                            style="background: #07C160; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                        复制内容
+                    </button>
+                    <button onclick="this.parentElement.remove()" 
+                            style="background: #f5f5f5; color: #666; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+                        关闭
+                    </button>
+                `;
+                document.body.appendChild(shareDialog);
+            }, 1000);
         }
 
         function getSelectedValue(selector) {
@@ -636,43 +603,6 @@
         function getSelectedValues(selector) {
             return Array.from(document.querySelectorAll(`${selector}.selected`))
                 .map(el => el.textContent.trim());
-        }
-
-        // 添加分享到微信的函数
-        async function shareToWeChat(imgDataUrl) {
-            try {
-                // 获取当前时间戳
-                const timestamp = new Date().getTime();
-                const fileName = `久坐情况报告_${timestamp}.png`;
-                
-                // 将base64图片转换为Blob
-                const response = await fetch(imgDataUrl);
-                const blob = await response.blob();
-                const file = new File([blob], fileName, { type: 'image/png' });
-                
-                // 尝试使用系统分享API
-                if (navigator.share) {
-                    await navigator.share({
-                        title: '久坐情况报告',
-                        text: '查看我的久坐情况报告',
-                        files: [file]
-                    });
-                } else {
-                    // 如果不支持系统分享API，尝试使用微信URL Scheme
-                    const wechatUrl = `weixin://dl/chat?scene=0&title=久坐情况报告&desc=查看我的久坐情况报告&url=${encodeURIComponent(window.location.href)}&imageUrl=${encodeURIComponent(imgDataUrl)}&timestamp=${timestamp}`;
-                    window.location.href = wechatUrl;
-                    
-                    // 如果3秒后还在当前页面，说明可能没有安装微信或打开失败
-                    setTimeout(() => {
-                        if (document.hidden === false) {
-                            alert('请确保已安装微信并登录');
-                        }
-                    }, 3000);
-                }
-            } catch (err) {
-                console.error('分享失败:', err);
-                alert('分享失败，请手动打开微信分享');
-            }
         }
     </script>
 </body>
