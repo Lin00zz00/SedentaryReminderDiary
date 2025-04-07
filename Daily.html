@@ -421,19 +421,31 @@
 
         // 修改生成报告的函数
         async function generateAndDownload() {
+            // 获取所有问题的答案
             const answers = {
-                dayType: getSelectedValue('.question:nth-child(2) .option'),
-                duration: getSelectedValue('.question:nth-child(3) .option'),
-                hasDevice: getSelectedValue('.question:nth-child(4) .option'),
+                dayType: getSelectedValue('.container .question:nth-child(2) .option'),
+                duration: getSelectedValue('.container .question:nth-child(3) .option'),
+                hasDevice: getSelectedValue('.container .question:nth-child(4) .option'),
                 deviceDuration: getSelectedValue('#device-duration-question .option'),
-                reasons: getSelectedValues('.question:nth-child(6) .option'),
-                standUpTimes: getSelectedValue('.question:nth-child(7) .option'),
-                discomfortLevel: getSelectedValue('.rating-option'),
+                reasons: getSelectedValues('.container .question:nth-child(6) .option'),
+                standUpTimes: getSelectedValue('.container .question:nth-child(7) .option'),
+                discomfortLevel: getSelectedValue('.container .question:nth-child(8) .rating-option'),
                 painLocations: getSelectedValues('#pain-locations .option'),
                 emotions: getSelectedValues('#emotions .option'),
-                solutions: getSelectedValues('.question:nth-child(10) .option'),
+                solutions: getSelectedValues('.container .question:nth-child(11) .option'),
                 additionalThoughts: document.getElementById('additional-thoughts').value
             };
+
+            // 处理其他选项的文本
+            if (answers.reasons.includes('📝 其他（请描述）') && answers.otherReason) {
+                const index = answers.reasons.indexOf('📝 其他（请描述）');
+                answers.reasons[index] = answers.otherReason;
+            }
+            
+            if (answers.solutions.includes('📝 其他（请描述）') && answers.otherSolution) {
+                const index = answers.solutions.indexOf('📝 其他（请描述）');
+                answers.solutions[index] = answers.otherSolution;
+            }
 
             // 获取当前日期和时间
             const now = new Date();
@@ -455,13 +467,13 @@
             document.getElementById('report-time').textContent = `⏰ 记录时间：${timeStr}`;
             document.getElementById('report-day-type').textContent = `📅 日期类型：${answers.dayType || '未选择'}`;
             document.getElementById('report-duration').textContent = `📍 久坐总时长：${answers.duration || '未选择'}`;
-            document.getElementById('report-device').textContent = `📱 智能设备监测：${answers.hasDevice === '是' ? `是（${answers.deviceDuration || '未选择'}）` : '否'}`;
-            document.getElementById('report-reasons').textContent = `📝 久坐原因：${answers.reasons.join(', ') || '未选择'}`;
+            document.getElementById('report-device').textContent = `📱 智能设备监测：${answers.hasDevice === '✅ 是' ? `是（${answers.deviceDuration || '未选择'}）` : '否'}`;
+            document.getElementById('report-reasons').textContent = `📝 久坐原因：${answers.reasons.length > 0 ? answers.reasons.join('、') : '未选择'}`;
             document.getElementById('report-standup').textContent = `📍 主动起身次数：${answers.standUpTimes || '未选择'}`;
             document.getElementById('report-discomfort').textContent = `😣 身体不适程度：${answers.discomfortLevel || '未选择'}`;
-            document.getElementById('report-pain').textContent = answers.painLocations.length > 0 ? `🔄 疼痛部位：${answers.painLocations.join(', ')}` : '';
-            document.getElementById('report-emotions').textContent = answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join(', ')}` : '';
-            document.getElementById('report-solutions').textContent = `💪 缓解方法：${answers.solutions.join(', ') || '未选择'}`;
+            document.getElementById('report-pain').textContent = answers.painLocations.length > 0 ? `🔄 疼痛部位：${answers.painLocations.join('、')}` : '';
+            document.getElementById('report-emotions').textContent = answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join('、')}` : '';
+            document.getElementById('report-solutions').textContent = `💪 缓解方法：${answers.solutions.length > 0 ? answers.solutions.join('、') : '未选择'}`;
             document.getElementById('report-additional-thoughts').textContent = `💭 想说的话：${answers.additionalThoughts || '无'}`;
 
             // 显示加载提示
