@@ -216,6 +216,66 @@
             margin-top: 10px;
             font-size: 14px;
         }
+
+        /* 添加分享按钮样式 */
+        .share-btn {
+            background: #07C160;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .share-btn:hover {
+            background: #06ae56;
+            transform: translateY(-2px);
+        }
+
+        /* 添加模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        #qrcode {
+            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+        }
     </style>
 </head>
 <body>
@@ -367,11 +427,22 @@
         </div>
         <div class="report-footer">
             💝 温馨提示：记得适时起身活动，保持健康哦！
+            <button class="share-btn" onclick="showShareQRCode()">分享到微信</button>
         </div>
     </div>
 
     <div class="loading">正在生成报告图片...</div>
 
+    <div id="share-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeShareModal()">&times;</span>
+            <h2>分享到微信</h2>
+            <p>请使用微信扫描下方二维码分享</p>
+            <div id="qrcode"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
     <script>
         const valueMappings = {
             dayType: {
@@ -567,6 +638,42 @@
                 console.error('生成图片时出错:', error);
                 document.querySelector('.loading').style.display = 'none';
                 alert('生成图片时出错，请重试');
+            }
+        }
+
+        function showShareQRCode() {
+            const modal = document.getElementById('share-modal');
+            const qrcodeDiv = document.getElementById('qrcode');
+            
+            // 清空之前的二维码
+            qrcodeDiv.innerHTML = '';
+            
+            // 生成当前页面的URL
+            const currentUrl = window.location.href;
+            
+            // 生成二维码
+            QRCode.toCanvas(qrcodeDiv, currentUrl, {
+                width: 200,
+                margin: 1,
+                color: {
+                    dark: '#000000',
+                    light: '#ffffff'
+                }
+            });
+            
+            // 显示模态框
+            modal.style.display = 'block';
+        }
+
+        function closeShareModal() {
+            document.getElementById('share-modal').style.display = 'none';
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('share-modal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
             }
         }
     </script>
