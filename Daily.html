@@ -448,6 +448,22 @@
                 }
             }
 
+            // 确保获取到日期类型
+            if (!answers.dayType) {
+                const dayTypeQuestion = document.querySelector('.question:nth-child(1)');
+                if (dayTypeQuestion) {
+                    answers.dayType = getSelectedValue('.option', dayTypeQuestion);
+                }
+            }
+
+            // 确保获取到不适程度
+            if (!answers.discomfortLevel) {
+                const discomfortQuestion = document.querySelector('.question:nth-child(7)');
+                if (discomfortQuestion) {
+                    answers.discomfortLevel = getSelectedValue('.rating-option', discomfortQuestion);
+                }
+            }
+
             // 处理其他选项的文本
             if (answers.reasons.includes('📝 其他（请描述）') && answers.otherReason) {
                 const index = answers.reasons.indexOf('📝 其他（请描述）');
