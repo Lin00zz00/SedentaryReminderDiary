@@ -344,7 +344,7 @@
                       rows="4"></textarea>
         </div>
 
-        <button class="submit-btn" onclick="generateReport()">生成报告并下载</button>
+        <button class="submit-btn" onclick="generateReport()">生成报告</button>
     </div>
 
     <div id="report-container">
@@ -509,16 +509,16 @@
 
             // 获取所有选中的选项
             const selectedOptions = {
-                dayType: document.querySelector('.question:has(.question-title:contains("工作日还是休息日")) .option.selected'),
+                dayType: document.querySelector('#day-type-question .option.selected'),
                 duration: document.querySelector('#duration-question .option.selected'),
-                hasDevice: document.querySelector('.question:has(.question-title:contains("是否有智能手环")) .option.selected'),
+                hasDevice: document.querySelector('#device-question .option.selected'),
                 deviceDuration: document.querySelector('#device-duration-question .option.selected'),
-                reasons: document.querySelectorAll('.question:has(.question-title:contains("导致你久坐的主要原因")) .option.selected'),
-                standUpTimes: document.querySelector('.question:has(.question-title:contains("主动起身的次数")) .option.selected'),
-                discomfortLevel: document.querySelector('.question:has(.question-title:contains("是否感到身体不适")) .rating-option.selected'),
+                reasons: document.querySelectorAll('#reasons-question .option.selected'),
+                standUpTimes: document.querySelector('#standup-question .option.selected'),
+                discomfortLevel: document.querySelector('#discomfort-question .rating-option.selected'),
                 painLocations: document.querySelectorAll('#pain-locations .option.selected'),
                 emotions: document.querySelectorAll('#emotions .option.selected'),
-                solutions: document.querySelectorAll('.question:has(.question-title:contains("缓解身体不适")) .option.selected'),
+                solutions: document.querySelectorAll('#solutions-question .option.selected'),
                 additionalThoughts: document.getElementById('additional-thoughts').value
             };
 
