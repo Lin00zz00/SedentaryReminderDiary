@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>每日久坐情况调查</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         * {
@@ -488,7 +489,7 @@
         }
 
         function getSelectedValue(selector) {
-            const selected = document.querySelector(`${selector}.selected`);
+            const selected = document.querySelector(selector);
             console.log(`选择器 ${selector} 的结果:`, selected);
             if (!selected) return '';
             const value = selected.textContent.trim();
@@ -497,7 +498,7 @@
         }
 
         function getSelectedValues(selector) {
-            const elements = document.querySelectorAll(`${selector}.selected`);
+            const elements = document.querySelectorAll(selector);
             console.log(`选择器 ${selector} 找到的元素:`, elements);
             const values = Array.from(elements).map(el => el.textContent.trim());
             console.log(`获取到的值数组:`, values);
@@ -509,16 +510,16 @@
             
             // 获取所有问题的答案
             const answers = {
-                dayType: getSelectedValue('.question:nth-of-type(1) .option'),
-                duration: getSelectedValue('#duration-question .option'),
-                hasDevice: getSelectedValue('.question:nth-of-type(3) .option'),
-                deviceDuration: getSelectedValue('#device-duration-question .option'),
-                reasons: getSelectedValues('.question:nth-of-type(5) .option'),
-                standUpTimes: getSelectedValue('.question:nth-of-type(6) .option'),
-                discomfortLevel: getSelectedValue('.question:nth-of-type(7) .rating-option'),
-                painLocations: getSelectedValues('#pain-locations .option'),
-                emotions: getSelectedValues('#emotions .option'),
-                solutions: getSelectedValues('.question:nth-of-type(8) .option'),
+                dayType: getSelectedValue('.question:nth-of-type(1) .option.selected'),
+                duration: getSelectedValue('#duration-question .option.selected'),
+                hasDevice: getSelectedValue('.question:nth-of-type(3) .option.selected'),
+                deviceDuration: getSelectedValue('#device-duration-question .option.selected'),
+                reasons: getSelectedValues('.question:nth-of-type(5) .option.selected'),
+                standUpTimes: getSelectedValue('.question:nth-of-type(6) .option.selected'),
+                discomfortLevel: getSelectedValue('.question:nth-of-type(7) .rating-option.selected'),
+                painLocations: getSelectedValues('#pain-locations .option.selected'),
+                emotions: getSelectedValues('#emotions .option.selected'),
+                solutions: getSelectedValues('.question:nth-of-type(8) .option.selected'),
                 additionalThoughts: document.getElementById('additional-thoughts').value
             };
 
