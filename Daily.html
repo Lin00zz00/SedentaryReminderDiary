@@ -344,7 +344,7 @@
                       rows="4"></textarea>
         </div>
 
-        <button class="submit-btn" onclick="generateAndDownload()">生成报告并下载</button>
+        <button class="submit-btn" onclick="updateReport()">生成报告并下载</button>
     </div>
 
     <div id="report-container">
@@ -449,6 +449,8 @@
                 }
 
                 handleConditionalDisplay();
+                // 每次选择后自动更新报告
+                updateReport();
             });
         });
 
@@ -458,8 +460,13 @@
                 parent.querySelectorAll('.rating-option').forEach(opt => opt.classList.remove('selected'));
                 this.classList.add('selected');
                 handleConditionalDisplay();
+                // 每次选择后自动更新报告
+                updateReport();
             });
         });
+
+        // 监听文本输入框的变化
+        document.getElementById('additional-thoughts').addEventListener('input', updateReport);
 
         function handleConditionalDisplay() {
             // 处理智能设备监测问题
@@ -488,57 +495,7 @@
             }
         }
 
-        function getSelectedValue(selector) {
-            const selected = document.querySelector(selector);
-            console.log(`选择器 ${selector} 的结果:`, selected);
-            if (!selected) return '';
-            const value = selected.textContent.trim();
-            console.log(`获取到的值: ${value}`);
-            return value;
-        }
-
-        function getSelectedValues(selector) {
-            const elements = document.querySelectorAll(selector);
-            console.log(`选择器 ${selector} 找到的元素:`, elements);
-            const values = Array.from(elements).map(el => el.textContent.trim());
-            console.log(`获取到的值数组:`, values);
-            return values;
-        }
-
-        async function generateAndDownload() {
-            console.log('开始生成报告...');
-            
-            // 获取所有问题的答案
-            const answers = {
-                dayType: getSelectedValue('[data-value="workday"], [data-value="restday"]'),
-                duration: getSelectedValue('#duration-question .option.selected'),
-                hasDevice: getSelectedValue('[data-value="yes"], [data-value="no"]'),
-                deviceDuration: getSelectedValue('#device-duration-question .option.selected'),
-                reasons: getSelectedValues('[data-value="meeting"], [data-value="focus"], [data-value="position"], [data-value="travel"], [data-value="lazy"], [data-value="entertainment"], [data-value="mood"], [data-value="other"]'),
-                standUpTimes: getSelectedValue('[data-value="0"], [data-value="1-2"], [data-value="3-5"], [data-value="6-plus"]'),
-                discomfortLevel: getSelectedValue('.rating-option.selected'),
-                painLocations: getSelectedValues('#pain-locations .option.selected'),
-                emotions: getSelectedValues('#emotions .option.selected'),
-                solutions: getSelectedValues('[data-value="stand"], [data-value="stretch"], [data-value="cushion"], [data-value="other"]'),
-                additionalThoughts: document.getElementById('additional-thoughts').value
-            };
-
-            console.log('收集到的所有答案:', answers);
-
-            // 处理其他选项的文本
-            const otherReasonInput = document.querySelector('.question:has([data-value="other"]) .other-input');
-            const otherSolutionInput = document.querySelector('.question:has([data-value="other"]) .other-input');
-            
-            if (answers.reasons.includes('📝 其他（请描述）') && otherReasonInput && otherReasonInput.value) {
-                const index = answers.reasons.indexOf('📝 其他（请描述）');
-                answers.reasons[index] = otherReasonInput.value;
-            }
-            
-            if (answers.solutions.includes('📝 其他（请描述）') && otherSolutionInput && otherSolutionInput.value) {
-                const index = answers.solutions.indexOf('📝 其他（请描述）');
-                answers.solutions[index] = otherSolutionInput.value;
-            }
-
+        async function updateReport() {
             // 获取当前日期和时间
             const now = new Date();
             const dateStr = now.toLocaleDateString('zh-CN', {
@@ -554,47 +511,41 @@
                 hour12: false
             });
 
-            // 生成报告文本
-            const reportText = `
-📅 每日久坐情况报告
+            // 获取所有选中的选项
+            const selectedOptions = {
+                dayType: document.querySelector('.question:nth-of-type(1) .option.selected'),
+                duration: document.querySelector('#duration-question .option.selected'),
+                hasDevice: document.querySelector('.question:nth-of-type(3) .option.selected'),
+                deviceDuration: document.querySelector('#device-duration-question .option.selected'),
+                reasons: document.querySelectorAll('.question:nth-of-type(5) .option.selected'),
+                standUpTimes: document.querySelector('.question:nth-of-type(6) .option.selected'),
+                discomfortLevel: document.querySelector('.question:nth-of-type(7) .rating-option.selected'),
+                painLocations: document.querySelectorAll('#pain-locations .option.selected'),
+                emotions: document.querySelectorAll('#emotions .option.selected'),
+                solutions: document.querySelectorAll('.question:nth-of-type(8) .option.selected'),
+                additionalThoughts: document.getElementById('additional-thoughts').value
+            };
 
-📆 记录日期：${dateStr}
-⏰ 记录时间：${timeStr}
-📅 日期类型：${answers.dayType || '未选择'}
-📍 久坐总时长：${answers.duration || '未选择'}
-📱 智能设备监测：${answers.hasDevice === '✅ 是' ? `是（${answers.deviceDuration || '未选择'}）` : '否'}
-📝 久坐原因：${answers.reasons.length > 0 ? answers.reasons.join('、') : '未选择'}
-📍 主动起身次数：${answers.standUpTimes || '未选择'}
-😣 身体不适程度：${answers.discomfortLevel || '未选择'}
-${answers.painLocations.length > 0 ? `🔄 疼痛部位：${answers.painLocations.join('、')}` : ''}
-${answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join('、')}` : ''}
-💪 缓解方法：${answers.solutions.length > 0 ? answers.solutions.join('、') : '未选择'}
-💭 想说的话：${answers.additionalThoughts || '无'}
-
-💝 温馨提示：记得适时起身活动，保持健康哦！
-            `.trim();
-
-            // 显示报告容器并更新内容
+            // 更新报告内容
             const reportContainer = document.getElementById('report-container');
             reportContainer.style.display = 'block';
             reportContainer.style.position = 'fixed';
             reportContainer.style.top = '50%';
             reportContainer.style.left = '50%';
             reportContainer.style.transform = 'translate(-50%, -50%)';
-            
-            // 更新报告内容
+
             document.getElementById('report-date').textContent = `📆 记录日期：${dateStr}`;
             document.getElementById('report-time').textContent = `⏰ 记录时间：${timeStr}`;
-            document.getElementById('report-day-type').textContent = `📅 日期类型：${answers.dayType || '未选择'}`;
-            document.getElementById('report-duration').textContent = `📍 久坐总时长：${answers.duration || '未选择'}`;
-            document.getElementById('report-device').textContent = `📱 智能设备监测：${answers.hasDevice === '✅ 是' ? `是（${answers.deviceDuration || '未选择'}）` : '否'}`;
-            document.getElementById('report-reasons').textContent = `📝 久坐原因：${answers.reasons.length > 0 ? answers.reasons.join('、') : '未选择'}`;
-            document.getElementById('report-standup').textContent = `📍 主动起身次数：${answers.standUpTimes || '未选择'}`;
-            document.getElementById('report-discomfort').textContent = `😣 身体不适程度：${answers.discomfortLevel || '未选择'}`;
-            document.getElementById('report-pain').textContent = answers.painLocations.length > 0 ? `🔄 疼痛部位：${answers.painLocations.join('、')}` : '';
-            document.getElementById('report-emotions').textContent = answers.emotions.length > 0 ? `😊 情绪标签：${answers.emotions.join('、')}` : '';
-            document.getElementById('report-solutions').textContent = `💪 缓解方法：${answers.solutions.length > 0 ? answers.solutions.join('、') : '未选择'}`;
-            document.getElementById('report-additional-thoughts').textContent = `💭 想说的话：${answers.additionalThoughts || '无'}`;
+            document.getElementById('report-day-type').textContent = `📅 日期类型：${selectedOptions.dayType ? selectedOptions.dayType.textContent : '未选择'}`;
+            document.getElementById('report-duration').textContent = `📍 久坐总时长：${selectedOptions.duration ? selectedOptions.duration.textContent : '未选择'}`;
+            document.getElementById('report-device').textContent = `📱 智能设备监测：${selectedOptions.hasDevice ? (selectedOptions.hasDevice.textContent === '✅ 是' ? `是（${selectedOptions.deviceDuration ? selectedOptions.deviceDuration.textContent : '未选择'}）` : '否') : '未选择'}`;
+            document.getElementById('report-reasons').textContent = `📝 久坐原因：${Array.from(selectedOptions.reasons).length > 0 ? Array.from(selectedOptions.reasons).map(opt => opt.textContent).join('、') : '未选择'}`;
+            document.getElementById('report-standup').textContent = `📍 主动起身次数：${selectedOptions.standUpTimes ? selectedOptions.standUpTimes.textContent : '未选择'}`;
+            document.getElementById('report-discomfort').textContent = `😣 身体不适程度：${selectedOptions.discomfortLevel ? selectedOptions.discomfortLevel.textContent : '未选择'}`;
+            document.getElementById('report-pain').textContent = Array.from(selectedOptions.painLocations).length > 0 ? `🔄 疼痛部位：${Array.from(selectedOptions.painLocations).map(opt => opt.textContent).join('、')}` : '';
+            document.getElementById('report-emotions').textContent = Array.from(selectedOptions.emotions).length > 0 ? `😊 情绪标签：${Array.from(selectedOptions.emotions).map(opt => opt.textContent).join('、')}` : '';
+            document.getElementById('report-solutions').textContent = `💪 缓解方法：${Array.from(selectedOptions.solutions).length > 0 ? Array.from(selectedOptions.solutions).map(opt => opt.textContent).join('、') : '未选择'}`;
+            document.getElementById('report-additional-thoughts').textContent = `💭 想说的话：${selectedOptions.additionalThoughts || '无'}`;
 
             // 显示加载提示
             document.querySelector('.loading').style.display = 'block';
