@@ -496,8 +496,8 @@
                 reportContainer.style.left = '0';
                 reportContainer.style.position = 'fixed';
                 reportContainer.style.width = '100%';
-                reportContainer.style.height = '100%';
-                reportContainer.style.overflow = 'auto';
+                reportContainer.style.height = 'auto';
+                reportContainer.style.overflow = 'visible';
                 reportContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
 
                 // 生成图片
@@ -507,7 +507,7 @@
                     backgroundColor: '#ffffff',
                     logging: false,
                     width: 600,
-                    height: reportContainer.scrollHeight + 400
+                    height: reportContainer.scrollHeight
                 });
 
                 // 恢复报告容器样式
